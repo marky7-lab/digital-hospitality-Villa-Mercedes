@@ -436,7 +436,7 @@ class AdminPaymentManagementTest extends TestCase
         $response = $this->actingAs($this->admin)->patch(route('admin.payments.verify', $payment));
 
         $response->assertRedirect(route('admin.reservations.show', $this->reservation));
-        $response->assertSessionHas('success', 'Payment verified. The reservation ledger and customer balance are updated.');
+        $response->assertSessionHas('success', 'Payment verified. The guest can see the updated balance.');
 
         $payment->refresh();
         $this->assertEquals(PaymentStatus::Verified, $payment->status);

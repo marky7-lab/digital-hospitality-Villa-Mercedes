@@ -129,17 +129,17 @@
                     <span :class="step === 1 ? 'text-primary' : 'text-text-muted'">Guest</span>
                 </li>
                 <span class="w-6 sm:w-12 h-0.5 bg-border"></span>
-                <li class="flex items-center gap-2 cursor-pointer" @click="step = 2">
+                <li class="flex items-center gap-2 cursor-pointer" @click="goToStep(2)">
                     <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" :class="step === 2 ? 'bg-primary text-white ring-2 ring-primary/20' : (step > 2 ? 'bg-success text-white' : 'bg-muted text-text-muted')">2</span>
                     <span :class="step === 2 ? 'text-primary' : 'text-text-muted'">Services</span>
                 </li>
                 <span class="w-6 sm:w-12 h-0.5 bg-border"></span>
-                <li class="flex items-center gap-2 cursor-pointer" @click="step = 3">
+                <li class="flex items-center gap-2 cursor-pointer" @click="goToStep(3)">
                     <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" :class="step === 3 ? 'bg-primary text-white ring-2 ring-primary/20' : (step > 3 ? 'bg-success text-white' : 'bg-muted text-text-muted')">3</span>
                     <span :class="step === 3 ? 'text-primary' : 'text-text-muted'">Schedule</span>
                 </li>
                 <span class="w-6 sm:w-12 h-0.5 bg-border"></span>
-                <li class="flex items-center gap-2 cursor-pointer" @click="step = 4">
+                <li class="flex items-center gap-2 cursor-pointer" @click="goToStep(4)">
                     <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs" :class="step === 4 ? 'bg-primary text-white ring-2 ring-primary/20' : 'bg-muted text-text-muted'">4</span>
                     <span :class="step === 4 ? 'text-primary' : 'text-text-muted'">Review &amp; Create</span>
                 </li>
@@ -174,59 +174,54 @@
                         </template>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div x-ref="guestFields" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                         <div>
                             <label class="admin-label">Full name</label>
-                            <input type="text" x-model="guest.guest_name" class="admin-input mt-1" required>
+                            <input type="text" x-model.trim="guest.guest_name" maxlength="255" pattern="(?=.*\p{L})[\p{L}\p{M} .'’\-]+" title="Use letters, spaces, apostrophes, periods, or hyphens." class="admin-input mt-1" required>
                         </div>
                         <div>
                             <label class="admin-label">Email address</label>
-                            <input type="email" x-model="guest.guest_email" class="admin-input mt-1" required>
+                            <input type="email" x-model.trim="guest.guest_email" maxlength="255" class="admin-input mt-1" required>
                         </div>
                         <div>
-                            <label class="admin-label">Phone number</label>
-                            <input type="text" x-model="guest.guest_phone" placeholder="09171234567" class="admin-input mt-1" required>
+                            <label for="walk-in-phone" class="admin-label">Mobile number</label>
+                            <input id="walk-in-phone" type="tel" inputmode="numeric" autocomplete="tel-national" pattern="09[0-9]{9}" maxlength="11" data-ph-mobile x-model="guest.guest_phone" placeholder="09171234567" aria-describedby="walk-in-phone-help" class="admin-input mt-1" required>
+                            <p id="walk-in-phone-help" class="admin-help">Enter 11 digits starting with 09.</p>
                         </div>
                         <div>
                             <label class="admin-label">Place of origin / City</label>
-                            <input type="text" x-model="guest.guest_place_of_origin" class="admin-input mt-1" required>
+                            <input type="text" x-model.trim="guest.guest_place_of_origin" maxlength="255" class="admin-input mt-1" required>
                         </div>
                         <div>
                             <label class="admin-label">Nationality</label>
-                            <input type="text" x-model="guest.guest_nationality" class="admin-input mt-1" required>
+                            <input type="text" x-model.trim="guest.guest_nationality" maxlength="100" class="admin-input mt-1" required>
                         </div>
                         <div>
                             <label class="admin-label">Company / Group (optional)</label>
-                            <input type="text" x-model="guest.guest_company" class="admin-input mt-1">
+                            <input type="text" x-model.trim="guest.guest_company" maxlength="255" class="admin-input mt-1">
                         </div>
                         <div>
                             <label class="admin-label">Valid ID type</label>
                             <select x-model="guest.guest_valid_id" class="admin-input mt-1" required>
                                 <option value="">Select ID type…</option>
-                                <option value="philsys">PhilSys National ID</option>
-                                <option value="passport">Passport</option>
-                                <option value="drivers_license">Driver's License</option>
-                                <option value="sss">SSS / UMID</option>
-                                <option value="tin">TIN ID</option>
-                                <option value="voters">Voter's ID</option>
-                                <option value="postal">Postal ID</option>
-                                <option value="prc">PRC ID</option>
+                                @foreach (\App\Enums\GuestIdType::cases() as $idType)
+                                    <option value="{{ $idType->value }}">{{ $idType->label() }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
                             <label class="admin-label">Gender</label>
                             <select x-model="guest.guest_gender" class="admin-input mt-1" required>
                                 <option value="">Select gender…</option>
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                                <option value="non_binary">Non-binary</option>
-                                <option value="prefer_not_to_say">Prefer not to say</option>
+                                @foreach (\App\Enums\GuestGender::cases() as $gender)
+                                    <option value="{{ $gender->value }}">{{ $gender->label() }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="flex justify-end pt-3">
-                        <button type="button" @click="step = 2" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover transition text-sm">
+                        <button type="button" @click="goToStep(2)" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover transition text-sm">
                             Next: Select Services &rarr;
                         </button>
                     </div>
@@ -283,7 +278,7 @@
 
                         <div class="flex items-center justify-between pt-3 border-t border-border">
                             <button type="button" @click="step = 1" class="text-xs font-semibold text-text-muted hover:underline">&larr; Back to guest</button>
-                            <button type="button" @click="step = 3" :disabled="lines.length === 0" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover disabled:opacity-50 transition text-sm">
+                            <button type="button" @click="goToStep(3)" :disabled="lines.length === 0" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover disabled:opacity-50 transition text-sm">
                                 Configure Schedules (<span x-text="lines.length"></span>) &rarr;
                             </button>
                         </div>
@@ -291,7 +286,7 @@
                 </div>
 
                 {{-- STAGE 3: Strict Schedule Controls --}}
-                <div x-show="step === 3" class="space-y-4">
+                <div x-show="step === 3" x-ref="scheduleFields" class="space-y-4">
                     <div class="rounded-xl border border-border bg-surface p-6 shadow-sm space-y-4">
                         <div class="flex items-center justify-between">
                             <div>
@@ -408,10 +403,10 @@
                                         </template>
 
                                         <div>
-                                            <label class="admin-label">Infants under one (room/package; free and excluded from guest count)<input type="number" min="0" x-model.number="line.infants_count" @change="onInputChanged()" class="admin-input"></label>
+                                            <label class="admin-label">Infants under one (room/package; free and excluded from guest count)<input type="number" min="0" max="500" x-model.number="line.infants_count" @change="onInputChanged()" class="admin-input"></label>
                                             <label class="admin-label">Older children (included in guest count)<input type="number" min="0" :max="line.guest_count" x-model.number="line.children_count" @change="onInputChanged()" class="admin-input"></label>
                                             <label class="admin-label">Party / Guest count</label>
-                                            <input type="number" x-model.number="line.guest_count" @change="onInputChanged()" min="1" :max="maxCapacity(line.facility_id)" class="admin-input mt-1">
+                                            <input type="number" x-model.number="line.guest_count" @change="onInputChanged()" min="1" :max="maxCapacity(line.facility_id)" class="admin-input mt-1" required>
                                         </div>
 
                                         <template x-if="isRoom(line.facility_id)">
@@ -451,7 +446,7 @@
 
                         <div class="flex items-center justify-between pt-3 border-t border-border">
                             <button type="button" @click="step = 2" class="text-xs font-semibold text-text-muted hover:underline">&larr; Back to catalog</button>
-                            <button type="button" @click="step = 4" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover transition text-sm">
+                            <button type="button" @click="goToStep(4)" class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold hover:bg-primary-hover transition text-sm">
                                 Review &amp; Create &rarr;
                             </button>
                         </div>
@@ -513,7 +508,7 @@
                     <div>
                         <label class="block text-sm"><input type="checkbox" x-model="petsIncluded"> Pets included: <x-amount :value="500" /> once per booking; diapers and cage or leash required; no pool entry.</label>
                         <label class="admin-label">Internal front desk notes</label>
-                        <textarea x-model="adminNotes" rows="2" class="admin-input mt-1 text-xs" placeholder="Onsite remarks, early check-in justifications, payment details…"></textarea>
+                        <textarea x-model="adminNotes" rows="2" maxlength="1000" class="admin-input mt-1 text-xs" placeholder="Onsite remarks, early check-in justifications, payment details…"></textarea>
                     </div>
 
                     {{-- Controlled Administrative Override Mechanism --}}
@@ -525,7 +520,7 @@
                             </label>
                             <span class="text-[11px] text-text-muted">Requires mandatory audit reason</span>
                         </div>
-                        <input type="text" x-model="overrideReason" placeholder="Management justification for operational scheduling exception…" class="admin-input text-xs">
+                        <input type="text" x-model="overrideReason" maxlength="1000" placeholder="Management justification for operational scheduling exception…" class="admin-input text-xs">
                         <p class="text-[11px] text-text-muted">Overrides do not allow double occupancy on closed facilities; all exceptions are logged in the back-office audit trail.</p>
                     </div>
 
@@ -808,7 +803,7 @@
                     this.guest.existing_user_id = cust.id;
                     this.guest.guest_name = cust.name;
                     this.guest.guest_email = cust.email;
-                    this.guest.guest_phone = cust.phone || '';
+                    this.guest.guest_phone = (cust.phone || '').replace(/[\s-]/g, '');
                     this.guest.guest_place_of_origin = cust.address || '';
                     this.guest.guest_nationality = cust.nationality || 'Filipino';
                     this.guest.guest_company = cust.company || '';
@@ -818,7 +813,34 @@
                     this.searchQuery = cust.name;
                 },
 
+                validateGuestFields() {
+                    const invalid = this.$refs.guestFields.querySelector('input:invalid, select:invalid');
+                    if (!invalid) return true;
+
+                    this.step = 1;
+                    this.$nextTick(() => invalid.reportValidity());
+                    return false;
+                },
+
+                goToStep(step) {
+                    if (!this.validateGuestFields()) return;
+                    if (step >= 3 && !this.lines.length) {
+                        this.step = 2;
+                        return;
+                    }
+                    if (step === 4 && this.step === 3) {
+                        const invalid = [...this.$refs.scheduleFields.querySelectorAll('input:invalid, select:invalid')]
+                            .find(field => field.getClientRects().length);
+                        if (invalid) {
+                            invalid.reportValidity();
+                            return;
+                        }
+                    }
+                    this.step = step;
+                },
+
                 async submitWalkIn() {
+                    if (!this.validateGuestFields()) return;
                     this.submitting = true;
                     this.errorMessage = '';
 
@@ -844,7 +866,7 @@
                         if (res.ok && data.success) {
                             window.location.href = data.redirect_url;
                         } else {
-                            this.errorMessage = data.message || 'Walk-in submission failed.';
+                            this.errorMessage = Object.values(data.errors || {}).flat()[0] || data.message || 'Walk-in submission failed.';
                         }
                     } catch (e) {
                         this.errorMessage = 'Network connection failed.';

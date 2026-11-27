@@ -37,7 +37,7 @@
             {{ $step === 'details' ? 'Step 2 of 2' : 'Create account' }}
         </p>
         <span @class(['block h-px w-10 bg-accent/70', 'mt-1' => $step === 'details', 'mt-2' => $step !== 'details']) aria-hidden="true"></span>
-        <h2 @class(['font-heading font-semibold text-text', 'mt-1 text-3xl' => $step === 'details', 'mt-4 text-3xl sm:text-4xl' => $step !== 'details'])>
+        <h2 @class(['font-heading font-semibold text-text', 'mt-1 text-2xl sm:text-3xl' => $step === 'details', 'mt-3 text-2xl sm:mt-4 sm:text-4xl' => $step !== 'details'])>
             @if ($step === 'otp')
                 Enter your verification code
             @elseif ($step === 'details')
@@ -236,7 +236,7 @@
                     <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-text-muted">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.95.68l1.5 4.5a1 1 0 01-.5 1.21l-2.26 1.13a11.04 11.04 0 005.52 5.52l1.13-2.26a1 1 0 011.21-.5l4.5 1.5a1 1 0 01.68.95V19a2 2 0 01-2 2h-1C9.72 21 3 14.28 3 6V5z" /></svg>
                     </span>
-                    <x-text-input id="phone" class="block w-full rounded-xl ps-11" type="tel" name="phone" :value="old('phone')" required autocomplete="tel" inputmode="numeric" pattern="09[0-9]{9}" minlength="11" maxlength="11" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" />
+                    <x-text-input id="phone" class="block w-full rounded-xl ps-11" type="tel" name="phone" :value="old('phone')" required autocomplete="tel" inputmode="numeric" pattern="09[0-9]{9}" minlength="11" maxlength="11" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." data-ph-mobile />
                 </div>
                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
             </div>

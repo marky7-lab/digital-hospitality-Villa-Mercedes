@@ -26,7 +26,7 @@ class RegistrationOtpService
 
     public const SESSION_OTP_SENT_AT = 'registration.otp_sent_at';
 
-    public const ELIGIBLE_STATUS = 'Your verification code is being sent. Check your inbox, spam, and existing Villa Mercedes email conversations.';
+    public const ELIGIBLE_STATUS = 'Look for your code in your inbox. If you don’t see it, check your spam folder or earlier Villa Mercedes emails.';
 
     public const EMAIL_TAKEN = 'This email already has an account.';
 

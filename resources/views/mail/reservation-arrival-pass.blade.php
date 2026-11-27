@@ -1,5 +1,5 @@
 <x-mail::message>
-# Your reservation copy
+# Your booking details
 
 Hello {{ $guestName }},
 
@@ -11,8 +11,8 @@ Hello {{ $guestName }},
 {{ $code }}
 </x-mail::panel>
 
-**Stay details**  
-Facility: {{ $facility }}  
+**Visit details**  
+Booked space: {{ $facility }}  
 Check-in: {{ $checkIn }}  
 Check-out: {{ $checkOut }}  
 Guests: {{ $guestCount }}  
@@ -24,12 +24,12 @@ Late check-out: {{ $lateHours }} hour(s)
 @endif
 Status: {{ $status }}  
 Total: {{ $totalPrice }}  
-Verified paid: {{ $verifiedPaid ?? 'See booking record' }}  
-Remaining balance due at physical check-in: {{ $remainingBalance ?? 'See booking record' }}  
-Accepted policy: {{ $policyVersion ?? 'Historical saved terms' }}
+Payments we’ve verified: {{ $verifiedPaid ?? 'See your booking' }}  
+Balance due at check-in: {{ $remainingBalance ?? 'See your booking' }}  
+
 
 @if($confirmedPolicy ?? false)
-Before physical check-in, including no-show, verified payments qualify for full refund. Staff receive requests and notify the owner; the owner approves refunds; administrators record that approval and the funds returned. Request, approval, and return are separate stages. Rescheduling has no notice deadline before physical check-in, subject to staff checks and guest acceptance of revised quotes.
+You can cancel and ask for a full refund of payments we’ve verified before you check in, even if you miss your visit. The resort owner approves refund requests. We record when your refund is sent. You can ask to change dates any time before check-in. We’ll check availability and share an updated price for you to accept.
 @endif
 
 @if(filled($specialRequests))
@@ -37,11 +37,11 @@ Before physical check-in, including no-show, verified payments qualify for full 
 {{ $specialRequests }}
 @endif
 
-Staff can find your reservation with the last 6 characters of the code. You do not need to open the website or sign in.
+Show this email at the front desk when you arrive. Our team can find your booking using the last six characters of your reservation code.
 
 @if($showPass)
 <x-mail::button :url="$passUrl">
-Open check in pass
+Open check-in pass
 </x-mail::button>
 @endif
 
@@ -49,6 +49,5 @@ Open check in pass
 Questions? Call us at [{{ $resortPhone }}]({{ $resortPhoneHref }}).
 @endif
 
-Thanks,<br>
-{{ config('resort.short_name') }}
+The {{ config('resort.short_name') }} team
 </x-mail::message>

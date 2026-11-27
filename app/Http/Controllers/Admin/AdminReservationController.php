@@ -158,7 +158,7 @@ class AdminReservationController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Reservation approved successfully.');
+        return redirect()->back()->with('success', 'Booking approved.');
     }
 
     public function reject(Request $request, Reservation $reservation): RedirectResponse
@@ -173,7 +173,7 @@ class AdminReservationController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Reservation rejected successfully.');
+        return redirect()->back()->with('success', 'Booking request declined.');
     }
 
     public function cancel(Request $request, Reservation $reservation): RedirectResponse
@@ -188,7 +188,7 @@ class AdminReservationController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Reservation cancelled successfully.');
+        return redirect()->back()->with('success', 'Booking cancelled.');
     }
 
     public function confirmWithdrawal(Request $request, Reservation $reservation): RedirectResponse
@@ -265,7 +265,7 @@ class AdminReservationController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
 
-        return redirect()->back()->with('success', 'Reservation rescheduled successfully.');
+        return redirect()->back()->with('success', 'Booking moved to the new dates.');
     }
 
     public function downloadGuestInformationSheet(Request $request, Reservation $reservation): Response
@@ -416,6 +416,6 @@ class AdminReservationController extends Controller
         }
 
         return redirect()->route('admin.reservations.show', $reservation)
-            ->with('success', 'Walk-in reservation created successfully.');
+            ->with('success', 'Walk-in booking saved.');
     }
 }

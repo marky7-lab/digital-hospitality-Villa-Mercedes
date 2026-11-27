@@ -61,7 +61,7 @@ class ReservationIntentController extends Controller
             'check_out' => $data['departure'] ?? (isset($data['check_out']) ? $data['check_out'] . ' 12:00' : null),
             'date' => $data['date'] ?? $data['check_in'] ?? null,
             'session' => $data['session'] ?? null,
-            'guest_count' => (int) ($data['guests'] ?? 1),
+            'guest_count' => (int) ($data['guests'] ?? 0),
             'pax_tier' => $data['pax_tier'] ?? null,
             'early_check_in_hours' => $data['early_check_in_hours'] ?? 0,
         ];

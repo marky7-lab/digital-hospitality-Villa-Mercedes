@@ -99,7 +99,7 @@ class GroupedBookingController extends Controller
         }
 
         return redirect()->route('customer.reservations.index', ['group' => $group->group_code])
-            ->with('success', 'Deposit proof submitted. Staff will review the transfer and your booking request.');
+            ->with('success', 'We received your deposit receipt. Our team will check the payment and review your booking request.');
     }
 
     /**
@@ -146,7 +146,7 @@ class GroupedBookingController extends Controller
                     'check_out' => $departure,
                     'date' => $request->query('date') ?: ($facility->isCottage() ? $request->query('check_in') : null),
                     'session' => $request->query('session'),
-                    'guest_count' => (int) ($request->query('guests') ?? 1),
+                    'guest_count' => (int) ($request->query('guests') ?? 0),
                     'pax_tier' => $request->filled('pax_tier') ? (int) $request->query('pax_tier') : null,
                     'early_check_in_hours' => (int) ($request->query('early_check_in_hours') ?? 0),
                 ];
@@ -205,10 +205,10 @@ class GroupedBookingController extends Controller
                 return response()->json([
                     'success' => false,
                     'code' => 'availability_expired',
-                    'message' => 'Availability estimate has expired. Please refresh availability before confirming.',
+                    'message' => 'Please check availability again before confirming. Your earlier results have expired.',
                 ], 422);
             }
-            return redirect()->back()->withInput()->with('error', 'Availability estimate has expired. Please refresh availability before confirming.');
+            return redirect()->back()->withInput()->with('error', 'Please check availability again before confirming. Your earlier results have expired.');
         }
 
         $guestData = [

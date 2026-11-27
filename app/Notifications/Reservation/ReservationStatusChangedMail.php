@@ -52,10 +52,10 @@ class ReservationStatusChangedMail extends Notification implements ShouldQueue
         $depositOwed = $this->reservation->deposit_required !== null
             && $this->reservation->getVerifiedTotalPaid() < $this->reservation->requiredDepositAmount();
 
-        return 'Your stay is confirmed. '
+        return 'Your booking is confirmed. '
             . ($depositOwed
-                ? 'The next step is the 50% deposit: open your reservation to scan the resort QR and upload your proof of payment before its deadline, and keep the remaining balance for check in. Show this email or the check in pass at the front desk — you do not need to sign in.'
-                : 'Show this email or the check in pass at the front desk — you do not need to sign in.');
+                ? 'Open your booking to pay the 50% deposit using the resort’s QR code. Upload your payment receipt before the deadline shown in your booking. You can pay the rest when you check in. Show this email or your check-in pass when you arrive.'
+                : 'Show this email or your check-in pass at the front desk when you arrive.');
     }
 
     /**
@@ -66,8 +66,8 @@ class ReservationStatusChangedMail extends Notification implements ShouldQueue
     private function expiredIntro(): string
     {
         return $this->reservation->approved_at === null
-            ? 'We could not answer this request within its review window, so the dates were released. Book again when you are ready, or call the resort so we can look for other dates or spaces.'
-            : 'The 50% deposit did not arrive before its deadline, so this booking was released. If you have already transferred the money, contact the resort — do not send another payment.';
+            ? 'Your booking request expired before we could confirm it. You can make a new request or call us for help finding another date or space.'
+            : 'Your booking expired because we didn’t receive the 50% deposit by the deadline. If you’ve already paid, please contact us before sending any more money.';
     }
 
     private function rejectedIntro(): string
@@ -76,7 +76,7 @@ class ReservationStatusChangedMail extends Notification implements ShouldQueue
 
         return 'We could not confirm this reservation.'
             . ($reason ? ' Reason: '.$reason : '')
-            . ' If you still want to visit, contact the resort so we can check other dates or spaces.';
+            . ' If you’d like to visit on another date, we’d be happy to check what’s available.';
     }
 
     private function cancelledIntro(): string
@@ -85,6 +85,6 @@ class ReservationStatusChangedMail extends Notification implements ShouldQueue
 
         return 'This reservation has been cancelled.'
             . ($reason ? ' Reason: '.$reason : '')
-            . ' If this was a mistake, contact the resort as soon as possible.';
+            . ' If you weren’t expecting this cancellation, please contact us as soon as you can.';
     }
 }

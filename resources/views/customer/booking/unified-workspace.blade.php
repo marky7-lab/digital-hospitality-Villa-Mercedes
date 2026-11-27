@@ -1,12 +1,5 @@
 <x-customer-layout>
-    <x-slot name="title">Unified Resort Booking Workspace · {{ config('resort.name') }}</x-slot>
-
-    <div class="bg-primary text-white">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-7 sm:pt-12 sm:pb-10">
-            <h1 class="mt-3 font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">Reserve your stay &amp; services</h1>
-            <p class="mt-3 text-white/75 max-w-2xl text-base sm:text-lg">Select rooms, cottages, function halls, and resort packages in one combined request. Complete your guest details, review your schedule and rates, and finalize your payment or quotation.</p>
-        </div>
-    </div>
+    <x-slot name="title">New reservation · {{ config('resort.name') }}</x-slot>
 
     @php
         $workspaceConfig = [
@@ -65,7 +58,7 @@
         ];
     @endphp
 
-    <div x-data="unifiedBookingWorkspace()" data-unified-booking-workspace class="bg-background min-h-[600px] py-8 sm:pt-12 pb-32 lg:pb-12">
+    <div x-data="unifiedBookingWorkspace()" data-unified-booking-workspace class="bg-background min-h-[600px] pt-5 pb-32 sm:pt-9 lg:pb-12">
 
         {{-- Service Details Slide-over Sheet with Centered Gallery --}}
         <div :hidden="!detailFacility" x-cloak @keydown.escape.window="closeDetails()" @keydown.tab="trapDetailFocus($event)" @popstate.window="closeDetails(false)" class="fixed inset-0 z-[80] overflow-hidden" role="presentation">
@@ -78,7 +71,7 @@
                             <span class="text-xs font-bold uppercase tracking-wider text-primary" x-text="detailFacility?.type_label"></span>
                             <h2 id="service-detail-title" class="font-heading text-2xl sm:text-3xl font-bold text-text mt-1" x-text="detailFacility?.name"></h2>
                         </div>
-                        <button type="button" @click="closeDetails()" class="rounded-xl border border-border p-2 text-text-muted hover:text-text hover:bg-muted" aria-label="Close service details" x-ref="detailClose">
+                        <button type="button" @click="closeDetails()" class="grid size-11 shrink-0 place-items-center rounded-xl border border-border text-text-muted hover:text-text hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" aria-label="Close service details" x-ref="detailClose">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                         </button>
                     </div>
@@ -86,8 +79,8 @@
                     {{-- Centered gallery with adjacent images available to click, swipe, or arrow through. --}}
                     <template x-if="detailFacility?.photos?.length">
                     <div class="mt-6"
-                         @keydown.arrow-left.window="if (detailFacility) prevPhoto()"
-                         @keydown.arrow-right.window="if (detailFacility) nextPhoto()"
+                         @keydown.left.prevent="prevPhoto()"
+                         @keydown.right.prevent="nextPhoto()"
                          @touchstart="touchStart($event)"
                          @touchend="touchEnd($event)">
                         <div class="relative flex h-56 items-center justify-center overflow-hidden rounded-2xl bg-text/95 sm:h-80" aria-label="Service photos">
@@ -95,7 +88,7 @@
                                 <button type="button" x-show="photoPosition(pIndex) !== 'hidden'" @click="activePhotoIndex = pIndex"
                                         :aria-label="'Show photo ' + (pIndex + 1) + ' of ' + detailFacility.photos.length"
                                         :aria-current="activePhotoIndex === pIndex ? 'true' : null"
-                                        class="absolute h-[78%] w-[72%] overflow-hidden rounded-xl border-2 border-white/70 shadow-2xl transition-all duration-300 ease-out motion-reduce:transition-none"
+                                        class="absolute h-[78%] w-[72%] overflow-hidden rounded-xl border-2 border-white/70 shadow-2xl transition-all duration-300 ease-out focus-visible:!z-30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
                                         :class="photoPosition(pIndex) === 'active' ? 'z-20 scale-100 opacity-100' : photoPosition(pIndex) === 'previous' ? 'z-10 -translate-x-[43%] scale-75 opacity-70 hover:opacity-90' : 'z-10 translate-x-[43%] scale-75 opacity-70 hover:opacity-90'">
                                     <img :src="photo" :alt="detailFacility.name + ' photo ' + (pIndex + 1)" class="h-full w-full bg-black object-contain" loading="lazy">
                                 </button>
@@ -107,7 +100,7 @@
                                 </div>
                             </template>
                         </div>
-                        <p class="mt-2 text-center text-xs text-text-muted" x-show="detailFacility?.photos.length > 1"><span x-text="activePhotoIndex + 1"></span> of <span x-text="detailFacility?.photos.length"></span> photos · Use arrows or swipe to browse</p>
+                        <p role="status" class="mt-2 text-center text-xs text-text-muted" x-show="detailFacility?.photos.length > 1" x-text="detailFacility ? 'Photo ' + (activePhotoIndex + 1) + ' of ' + detailFacility.photos.length : ''"></p>
                     </div>
                     </template>
                     <div x-show="detailFacility && !detailFacility.photos.length" class="mt-6 flex h-44 items-center justify-center rounded-xl border border-dashed border-border bg-muted text-sm text-text-muted">No photo published for this service</div>
@@ -168,10 +161,13 @@
         </div>
 
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            {{-- Stage Progress Indicator (1. Services -> 2. Guest Details -> 3. Review -> 4. Payment) --}}
-            <nav aria-label="Booking steps" class="mb-8">
-                <ol class="grid grid-cols-4 max-w-2xl mx-auto border border-border bg-surface rounded-2xl p-3 shadow-xs text-center divide-x divide-border">
+            <header class="mb-4 grid gap-3 border-b border-border pb-4 sm:mb-6 sm:gap-5 sm:pb-5 lg:mb-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-center lg:gap-8">
+                <div>
+                    <h1 class="font-heading text-2xl font-bold tracking-tight text-text sm:text-4xl">New reservation</h1>
+                    <p class="mt-1 text-sm leading-relaxed text-text-muted sm:text-base">Book rooms, cottages, function halls, and resort packages together.</p>
+                </div>
+                <nav aria-label="Booking steps">
+                <ol class="grid grid-cols-4 gap-1.5 text-center">
                     <li :aria-current="step === 1 ? 'step' : null" class="px-2 flex flex-col items-center gap-1.5">
                         <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs"
                               :class="step === 1 ? 'bg-primary text-white ring-4 ring-primary/20' : (step > 1 ? 'bg-success text-white' : 'bg-muted text-text-muted')">
@@ -204,7 +200,8 @@
                         <span class="text-xs font-semibold" :class="step === 4 ? 'text-primary' : 'text-text-muted'">Payment</span>
                     </li>
                 </ol>
-            </nav>
+                </nav>
+            </header>
 
             {{-- Error Summary --}}
             <div x-show="errorMessage" x-cloak class="mb-6 rounded-2xl border border-danger/40 bg-danger-light p-4 text-danger flex items-start gap-3" role="alert" tabindex="-1" x-ref="errorSummary">
@@ -216,38 +213,33 @@
                 <button type="button" @click="errorMessage = ''" class="text-danger hover:opacity-75 font-bold" aria-label="Dismiss">&times;</button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-[1.55fr_1fr] gap-8 items-start">
+            <div class="grid grid-cols-1 items-start"
+                 :class="step === 1 ? 'gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,0.53fr)] lg:gap-8' : 'mx-auto max-w-4xl gap-4'">
                 
-                {{-- Left Column: Step Content --}}
+                {{-- Step content --}}
                 <div class="min-w-0 space-y-6">
 
                     {{-- STEP 1: Services Picker & Controls --}}
-                    <div :hidden="step !== 1" class="space-y-6">
-                        <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div>
-                                <h2 tabindex="-1" id="booking-step-1" class="font-heading text-2xl font-bold text-text">Explore resort services</h2>
-                                <p class="text-sm text-text-muted">Choose your rooms, cottages, halls, or packages to build your booking.</p>
-                            </div>
-                        </div>
+                    <div :hidden="step !== 1" class="space-y-4 sm:space-y-6">
+                        <h2 tabindex="-1" id="booking-step-1" class="text-lg font-bold text-text sm:text-xl">Choose your services</h2>
 
                         {{-- Service Categories Filter: Selected services, Room, Function Halls, Resort Packages, Cottage --}}
-                        <div class="booking-category-tabs flex gap-2 overflow-x-auto pb-2" aria-label="Service categories">
+                        <div class="flex flex-wrap gap-2" role="group" aria-label="Service categories">
                             <template x-for="cat in categories" :key="cat.slug">
                                 <button type="button" @click="categoryFilter = cat.slug" :aria-pressed="categoryFilter === cat.slug"
-                                        class="shrink-0 rounded-full px-4 py-2 text-xs font-bold uppercase tracking-wider border transition"
-                                        :class="categoryFilter === cat.slug ? 'bg-primary text-white border-primary shadow-xs' : 'bg-surface text-text border-border hover:bg-muted'">
+                                        class="min-h-11 rounded-lg border px-3 text-sm font-semibold transition-colors motion-reduce:transition-none"
+                                        :class="categoryFilter === cat.slug ? 'border-primary bg-primary-light text-primary' : 'border-border bg-surface text-text hover:bg-muted'">
                                     <span x-text="cat.label"></span>
                                     <template x-if="cat.slug === 'selected' && lines.length > 0">
-                                        <span class="ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] bg-white text-primary font-extrabold" x-text="lines.length"></span>
+                                        <span class="ml-1 rounded-full bg-surface px-1.5 py-0.5 text-xs font-bold text-primary" x-text="lines.length"></span>
                                     </template>
                                 </button>
                             </template>
                         </div>
-                        <p class="-mt-4 text-xs text-text-muted sm:hidden">Swipe the categories to browse all services.</p>
 
                         {{-- Category View: Selected Services (Empty state or cards) --}}
                         <template x-if="categoryFilter === 'selected' && lines.length === 0">
-                            <div class="rounded-2xl border border-dashed border-border bg-surface p-10 text-center space-y-3 shadow-xs">
+                            <div class="rounded-2xl border border-dashed border-border bg-surface p-5 text-center space-y-3 shadow-xs sm:p-10">
                                 <div class="w-12 h-12 rounded-full bg-muted mx-auto flex items-center justify-center text-text-muted">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                                 </div>
@@ -264,9 +256,9 @@
                         {{-- Catalog Cards Grid (when viewing a specific category) --}}
                         <div class="grid gap-4 sm:grid-cols-2" x-show="categoryFilter !== 'selected'">
                             <template x-for="fac in filteredFacilities" :key="fac.id">
-                                <article class="overflow-hidden rounded-2xl border border-border bg-surface shadow-xs flex flex-col justify-between">
+                                <article class="flex min-w-0 flex-col justify-between rounded-xl border border-border bg-surface sm:rounded-2xl sm:shadow-xs">
                                     <div>
-                                        <div class="relative h-44 w-full bg-muted overflow-hidden">
+                                        <div class="relative h-32 w-full overflow-hidden rounded-t-xl bg-muted sm:h-44 sm:rounded-t-2xl">
                                             <template x-if="fac.photos.length">
                                                 <img :src="fac.photos[0]" :alt="fac.name" class="h-full w-full object-cover" loading="lazy">
                                             </template>
@@ -275,16 +267,16 @@
                                             </template>
                                             <span class="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-xs text-[11px] font-bold text-white uppercase tracking-wider" x-text="fac.type_label"></span>
                                         </div>
-                                        <div class="p-4 space-y-2">
-                                            <h3 class="font-heading text-lg font-bold text-text" x-text="fac.name"></h3>
+                                        <div class="space-y-1 p-3 sm:space-y-2 sm:p-4">
+                                            <h3 class="text-pretty font-heading text-base font-bold text-text sm:text-lg" x-text="fac.name"></h3>
                                             <p class="text-xs text-text-muted line-clamp-2" x-text="fac.description || 'Description not yet published.'"></p>
                                             <p class="text-xs text-text-muted font-medium" x-text="humanSchedule(fac)"></p>
                                             <p class="font-heading font-extrabold text-primary text-base" x-text="fac.rate ? formatPesos(fac.rate.amount) + ' ' + fac.rate.unit : 'Rate on request'"></p>
                                         </div>
                                     </div>
-                                    <div class="p-4 pt-0 flex gap-2">
-                                        <button type="button" @click="openDetails(fac, $event.currentTarget)" class="flex-1 rounded-xl border border-border px-3 py-2 text-xs font-bold text-text hover:bg-muted">View details</button>
-                                        <button type="button" @click="addLine(fac.id)" class="flex-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary-hover disabled:opacity-50 shadow-xs" :disabled="lines.some(line => Number(line.facility_id) === fac.id)">
+                                    <div class="flex gap-2 px-3 pb-3 sm:px-4 sm:pb-4">
+                                        <button type="button" @click="openDetails(fac, $event.currentTarget)" :aria-label="'View details for ' + fac.name" aria-haspopup="dialog" class="min-h-11 flex-1 rounded-xl border border-border px-3 py-2 text-xs font-bold text-text hover:bg-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">View details</button>
+                                        <button type="button" @click="addLine(fac.id)" class="min-h-11 flex-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-white hover:bg-primary-hover disabled:opacity-50 shadow-xs" :disabled="lines.some(line => Number(line.facility_id) === fac.id)">
                                             <span x-text="lines.some(line => Number(line.facility_id) === fac.id) ? 'Added' : 'Add to booking'"></span>
                                         </button>
                                     </div>
@@ -293,13 +285,13 @@
                         </div>
 
                         {{-- Selected services Header & Form Cards --}}
-                        <div id="selected-services" x-ref="selectedServices" tabindex="-1" class="pt-6 border-t border-border space-y-4">
-                            <div class="flex items-center justify-between">
+                        <div id="selected-services" x-ref="selectedServices" tabindex="-1" class="space-y-3 border-t border-border pt-4 sm:space-y-4 sm:pt-6">
+                            <div class="flex items-start justify-between gap-2 sm:items-center">
                                 <div>
-                                    <h3 class="font-heading text-xl font-bold text-text">Selected services</h3>
+                                    <h3 class="font-heading text-lg font-bold text-text sm:text-xl">Selected services</h3>
                                     <p class="text-sm text-text-muted">Choose a schedule and guest count for each service.</p>
                                 </div>
-                                <span class="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold text-xs" x-text="lines.length + (lines.length === 1 ? ' service' : ' services')"></span>
+                                <span class="shrink-0 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary" x-text="lines.length + (lines.length === 1 ? ' service' : ' services')"></span>
                             </div>
 
                             <template x-if="lines.length === 0">
@@ -311,13 +303,13 @@
                             {{-- Service Line Cards --}}
                             <div class="space-y-4">
                                 <template x-for="(line, index) in lines" :key="line.facility_id">
-                                    <div class="rounded-2xl border border-border bg-surface p-5 sm:p-6 shadow-xs relative transition-all"
+                                    <div class="relative rounded-2xl border border-border bg-surface p-3.5 shadow-xs transition-all sm:p-6"
                                          :class="lineStatusClass(index)">
-                                        <div class="flex items-start justify-between gap-4 mb-4">
+                                        <div class="mb-2 flex items-start justify-between gap-3 sm:mb-4 sm:gap-4">
                                             <div class="flex items-center gap-2.5">
 
                                                 <div>
-                                                    <h4 class="font-heading text-lg font-bold text-text" x-text="facilityName(line.facility_id)"></h4>
+                                                    <h4 class="font-heading text-base font-bold text-text sm:text-lg" x-text="facilityName(line.facility_id)"></h4>
                                                     <p class="text-xs text-text-muted" x-text="humanSchedule(facility(line.facility_id))"></p>
                                                 </div>
                                             </div>
@@ -327,7 +319,7 @@
                                             </button>
                                         </div>
 
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
                                             {{-- Conditional Controls for Cottages (Visit Date + Session) --}}
                                             <template x-if="isCottage(line.facility_id)">
                                                 <div class="contents">
@@ -421,22 +413,19 @@
                                                 </div>
                                             </template>
 
-                                            {{-- Guest Count --}}
+                                            <template x-if="isRoom(line.facility_id) || facility(line.facility_id)?.schedule.mode === 'package'">
+                                                <label class="block text-sm font-semibold">Infants under 1 (free of charge)<input type="number" min="0" max="500" x-model.number="line.infants_count" @change="onInputChanged(index)" class="admin-input mt-1 min-h-12 w-full !text-base"></label>
+                                            </template>
                                             <div>
                                                 <label :for="'booking-guest-count-' + line.facility_id" class="mb-1 block text-sm font-semibold text-text">Guests</label>
-                                                <input :id="'booking-guest-count-' + line.facility_id" type="number" required x-model.number="line.guest_count" @change="onInputChanged(index)" min="1" :max="maxCapacity(line.facility_id)" class="admin-input min-h-12 w-full !text-base">
+                                                <input :id="'booking-guest-count-' + line.facility_id" :aria-describedby="isRoom(line.facility_id) || facility(line.facility_id)?.schedule.mode === 'package' ? 'booking-guest-count-help-' + line.facility_id : null" type="number" required x-model.number="line.guest_count" @change="onInputChanged(index)" min="1" :max="maxCapacity(line.facility_id)" class="admin-input min-h-12 w-full !text-base">
+                                                <template x-if="isRoom(line.facility_id) || facility(line.facility_id)?.schedule.mode === 'package'">
+                                                    <p :id="'booking-guest-count-help-' + line.facility_id" class="mt-1 text-sm text-text-muted">Count everyone aged 1 and over, including children.</p>
+                                                </template>
                                                 <template x-if="!isCottage(line.facility_id)">
                                                     <p class="mt-1 text-sm text-text-muted" x-text="capacityHint(line.facility_id)"></p>
                                                 </template>
                                             </div>
-                                            <template x-if="isRoom(line.facility_id) || facility(line.facility_id)?.schedule.mode === 'package'">
-                                                <fieldset class="col-span-full grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
-                                                    <legend class="sr-only">Children and infants</legend>
-                                                    <label class="block text-sm font-semibold">Children aged 1 and over<input type="number" min="0" :max="line.guest_count" x-model.number="line.children_count" @change="onInputChanged(index)" class="admin-input mt-1 min-h-12 w-full !text-base"></label>
-                                                    <label class="block text-sm font-semibold">Infants under 1<input type="number" min="0" max="500" x-model.number="line.infants_count" @change="onInputChanged(index)" class="admin-input mt-1 min-h-12 w-full !text-base"></label>
-                                                    <p class="text-sm text-text-muted sm:col-span-2">Include children in Guests. Infants are free and count separately. The resort confirms any child charges later.</p>
-                                                </fieldset>
-                                            </template>
                                         </div>
 
                                         <details class="mt-4 border-t border-border pt-2">
@@ -507,7 +496,7 @@
                                     </div>
                                     <div>
                                         <label for="booking-phone" class="mb-1 block text-sm font-semibold text-text">Mobile number *</label>
-                                        <input id="booking-phone" name="guest_phone" autocomplete="tel-national" aria-describedby="booking-phone-help" type="tel" x-model="guest.guest_phone" class="admin-input !text-base w-full min-h-12" required>
+                                        <input id="booking-phone" name="guest_phone" autocomplete="tel-national" aria-describedby="booking-phone-help" type="tel" inputmode="numeric" pattern="09[0-9]{9}" maxlength="11" data-ph-mobile x-model="guest.guest_phone" class="admin-input !text-base w-full min-h-12" required>
                                         <p id="booking-phone-help" class="mt-1 text-sm text-text-muted">Use a Philippine mobile number starting with 09, such as 09171234567.</p>
                                     </div>
                                     <div>
@@ -701,11 +690,11 @@
 
                 </div>
 
-                {{-- Right Column: Persistent Sticky Summary & Actions Bar --}}
-                <div id="booking-summary" class="lg:sticky lg:top-24 space-y-5">
-                    <div class="rounded-2xl border border-border bg-surface p-6 shadow-xs">
+                {{-- Services summary and step actions --}}
+                <div id="booking-summary" :class="{ 'lg:sticky lg:top-24': step === 1 }">
+                    <div :class="{ 'rounded-2xl border border-border bg-surface p-4 sm:p-5': step === 1 }">
                         <div x-show="step === 1" class="flex items-center justify-between border-b border-border pb-4">
-                            <h3 class="font-heading text-lg font-bold text-text">Booking summary</h3>
+                            <h2 class="text-lg font-bold text-text">Booking summary</h2>
                             <button type="button" @click="checkAvailability()" :disabled="checking" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
                                 <svg class="w-3.5 h-3.5" :class="{ 'animate-spin': checking }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                                 Recheck
@@ -918,7 +907,7 @@
                 guest: {
                     guest_name: config.guestProfile.guest_name || '',
                     guest_email: config.guestProfile.guest_email || '',
-                    guest_phone: config.guestProfile.guest_phone || '',
+                    guest_phone: (config.guestProfile.guest_phone || '').replace(/[\s-]/g, ''),
                     guest_place_of_origin: config.guestProfile.guest_place_of_origin || '',
                     guest_nationality: config.guestProfile.guest_nationality || '',
                     guest_company: config.guestProfile.guest_company || '',
@@ -935,10 +924,9 @@
                             date: l.date || '',
                             swimming_session_id: Number(l.swimming_session_id || this.config.sessions.find(s => s.slug === l.session)?.id || 0) || '',
                             session: l.session || '',
-                            guest_count: l.guest_count || 1,
+                            guest_count: l.guest_count ?? 0,
                             pax_tier: l.pax_tier || null,
                             infants_count: l.infants_count || 0,
-                            children_count: l.children_count || 0,
                             early_check_in_hours: l.early_check_in_hours || 0,
                             late_check_out_hours: l.late_check_out_hours || 0,
                             special_requests: l.special_requests || '',
@@ -963,10 +951,9 @@
                         date: '',
                         swimming_session_id: '',
                         session: '',
-                        guest_count: 1,
+                        guest_count: 0,
                         pax_tier: null,
                         infants_count: 0,
-                        children_count: 0,
                         early_check_in_hours: 0,
                         late_check_out_hours: 0,
                         special_requests: '',
@@ -1080,7 +1067,7 @@
                     if (this.isRoom(line.facility_id) && this.isSameDayRoom(line) && (!line.check_in.slice(11, 16) || !line.check_out.slice(11, 16))) {
                         return 'Choose both check-in and check-out times.';
                     }
-                    return line.guest_count ? '' : 'Enter the number of guests.';
+                    return Number(line.guest_count) >= 1 ? '' : 'Enter at least one guest.';
                 },
 
                 onInputChanged() {
@@ -1096,7 +1083,7 @@
                 async checkAvailability() {
                     clearTimeout(this.debounceTimer);
                     const requestId = ++this.availabilityRequestId;
-                    if (this.lines.length === 0) {
+                    if (this.lines.length === 0 || this.lines.some(line => Number(line.guest_count) < 1)) {
                         this.evaluation = null;
                         this.versionToken = null;
                         this.checking = false;
@@ -1229,9 +1216,6 @@
                     const name = fields.guest_name.value.trim();
                     fields.guest_name.setCustomValidity(!name || /^(?=.*\p{L})[\p{L}\p{M} .'’\-]+$/u.test(name)
                         ? '' : 'Use letters, spaces, apostrophes, periods, or hyphens in the guest name.');
-                    const phone = fields.guest_phone.value.replace(/[\s-]/g, '');
-                    fields.guest_phone.setCustomValidity(!phone || /^09[0-9]{9}$/.test(phone)
-                        ? '' : 'Enter an 11-digit Philippine mobile number starting with 09.');
                     for (const field of [fields.guest_name, fields.guest_phone, fields.guest_place_of_origin, fields.guest_nationality]) {
                         if (field.value && !field.value.trim()) field.setCustomValidity('Enter a value for this field.');
                     }
@@ -1328,8 +1312,7 @@
                     formData.append('pets_included', this.petsIncluded ? '1' : '0');
 
                     Object.keys(this.guest).forEach(gk => {
-                        const value = this.guest[gk].trim();
-                        formData.append(gk, gk === 'guest_phone' ? value.replace(/[\s-]/g, '') : value);
+                        formData.append(gk, this.guest[gk].trim());
                     });
 
                     formData.append('payment_destination_id', this.selectedDestinationId);

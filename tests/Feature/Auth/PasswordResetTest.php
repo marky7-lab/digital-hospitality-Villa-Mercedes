@@ -32,7 +32,7 @@ class PasswordResetTest extends TestCase
         $this->from('/forgot-password')
             ->post('/forgot-password', ['email' => $user->email])
             ->assertRedirect('/forgot-password')
-            ->assertSessionHas('status', 'If this email belongs to an account, check its inbox and spam folder for a password reset link.');
+            ->assertSessionHas('status', 'If you have an account with this email address, look for a password reset link in your inbox. Check your spam folder if you don’t see it.');
 
         Notification::assertSentTo($user, GuestPasswordResetNotification::class);
     }
@@ -59,7 +59,7 @@ class PasswordResetTest extends TestCase
         Notification::fake();
         $this->post('/forgot-password', ['email' => 'unknown@example.com'])
             ->assertSessionHasNoErrors()
-            ->assertSessionHas('status', 'If this email belongs to an account, check its inbox and spam folder for a password reset link.');
+            ->assertSessionHas('status', 'If you have an account with this email address, look for a password reset link in your inbox. Check your spam folder if you don’t see it.');
         Notification::assertNothingSent();
     }
 
@@ -148,7 +148,7 @@ class PasswordResetTest extends TestCase
 
         $response->assertRedirect('/forgot-password')
             ->assertSessionHas('password_reset_url')
-            ->assertSessionHas('status', 'If this email belongs to an account, check its inbox and spam folder for a password reset link.');
+            ->assertSessionHas('status', 'If you have an account with this email address, look for a password reset link in your inbox. Check your spam folder if you don’t see it.');
 
         Queue::assertPushed(SendQueuedNotifications::class, 1);
 

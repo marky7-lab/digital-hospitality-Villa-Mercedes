@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-8">
-        <h2 class="font-display text-3xl font-bold text-text">Choose a new password</h2>
+        <h2 class="font-display text-2xl font-bold sm:text-3xl text-text">Choose a new password</h2>
         <p class="mt-2 text-text-muted">Use the email address where you received the reset link, then enter your new password.</p>
     </div>
 

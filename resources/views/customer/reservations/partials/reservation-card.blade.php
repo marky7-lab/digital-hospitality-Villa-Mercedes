@@ -45,7 +45,7 @@
 @endphp
 
 <div class="bg-surface border border-border rounded-2xl shadow-sm overflow-hidden">
-    <div class="px-5 py-4 sm:px-6 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 border-b border-border">
+    <div class="px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 border-b border-border">
         <div class="min-w-0">
             @if($reservation->reservation_group_id && $reservation->reservationGroup)
                 <p class="text-xs font-semibold text-primary uppercase tracking-wide mb-0.5">
@@ -55,7 +55,7 @@
                     <a href="{{ route('customer.grouped-booking.quote-checkout', $reservation->reservationGroup) }}" class="mb-2 inline-block rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-white">Review quote and submit deposit</a>
                 @endif
             @endif
-            <h2 class="break-words font-heading text-2xl font-semibold text-text">
+            <h2 class="break-words font-heading text-xl sm:text-2xl font-semibold text-text">
                 {{ $reservation->facility->name }}
             </h2>
             <p class="mt-1 text-sm text-text-muted">
@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <dl class="px-5 py-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <dl class="px-4 py-3 sm:px-6 sm:py-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="sm:col-span-2">
             <dt class="text-xs font-semibold uppercase tracking-wide text-text-muted">Dates</dt>
             <dd class="mt-1 text-sm text-text">
@@ -85,7 +85,7 @@
         <p class="break-words px-5 pb-4 text-sm text-text-muted sm:px-6">{{ $closedReason }}</p>
     @endif
 
-    <div class="px-5 py-4 sm:px-6 bg-background border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="px-4 py-3 sm:px-6 sm:py-4 bg-background border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div class="flex flex-wrap gap-x-6 gap-y-2">
             <div>
                 <p class="text-xs font-semibold uppercase tracking-wide text-text-muted">Total</p>
@@ -129,7 +129,7 @@
                 </a>
             @endif
             @if($showDestination)
-                <a href="{{ $destination === \App\Enums\ReservationDestination::Payments ? $destination->url($reservation) : url()->query($destination->url($reservation), request()->only('tab', 'page')) }}"
+                <a href="{{ url()->query($destination->url($reservation), request()->only('tab', 'page')) }}"
                    class="inline-flex justify-center items-center min-h-[44px] px-4 text-sm font-semibold text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg">
                     {{ $destination->linkLabel() }}
                 </a>
@@ -138,7 +138,7 @@
             @if($isClosed && $refundStatus)
                 <x-primary-button tag="a" href="{{ route('customer.reservations.show', [$reservation, ...request()->only('tab', 'page')]) }}#refund-flow" class="justify-center">Track refund</x-primary-button>
             @elseif($isClosed && ($pendingVerification > 0 || $verifiedPaid > 0))
-                <x-primary-button tag="a" href="{{ route('customer.payments.index', $reservation) }}" class="justify-center">View payment status</x-primary-button>
+                <x-primary-button tag="a" href="{{ route('customer.payments.index', [$reservation, ...request()->only('tab', 'page')]) }}" class="justify-center">View payment status</x-primary-button>
             @elseif(! $isClosed && ($paymentAction['kind'] ?? null) === 'status')
                 <span class="inline-flex flex-col items-center min-h-[44px] px-4 text-sm text-text-muted">
                     <span class="font-semibold">{{ $paymentAction['label'] }}</span>
@@ -147,7 +147,7 @@
                     @endif
                 </span>
             @elseif(! $isClosed && $paymentAction !== null)
-                <x-primary-button tag="a" href="{{ route('customer.payments.index', $reservation) }}" class="justify-center">
+                <x-primary-button tag="a" href="{{ route('customer.payments.index', [$reservation, ...request()->only('tab', 'page')]) }}" class="justify-center">
                     {{ $paymentAction['label'] }}
                 </x-primary-button>
             @endif

@@ -24,7 +24,7 @@
 {{-- `data-customer-page-header` is the marker the shell guard counts, so "this
      page announces itself the shared way, exactly once" is a thing a test can
      ask the rendered page instead of a convention someone remembers. --}}
-<div data-customer-page-header {{ $attributes->merge(['class' => 'space-y-5']) }}>
+<div data-customer-page-header {{ $attributes->merge(['class' => 'space-y-3 sm:space-y-5']) }}>
     @if(! empty($breadcrumbs))
         <nav aria-label="Breadcrumb" class="text-xs text-text-muted">
             <ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -52,7 +52,7 @@
         </a>
     @endif
 
-    <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+    <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-3 sm:gap-y-4">
         <div class="min-w-0">
             @if($eyebrow)
                 <p class="mb-3 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-text-muted">
@@ -60,10 +60,10 @@
                     {{ $eyebrow }}
                 </p>
             @endif
-            <h1 class="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-text">{{ $title }}</h1>
+            <h1 class="font-heading text-2xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-text">{{ $title }}</h1>
 
             @if($description)
-                <p class="mt-2 max-w-3xl text-text-muted">{{ $description }}</p>
+                <p class="mt-2 max-w-3xl text-sm text-text-muted sm:text-base">{{ $description }}</p>
             @endif
         </div>
 

@@ -27,7 +27,7 @@ class AdminFaqCategoryController extends Controller
     {
         $this->service->createCategory($request->user(), $request->validated());
 
-        return redirect()->back()->with('success', 'Category created successfully.');
+        return redirect()->back()->with('success', 'FAQ category added.');
     }
 
     public function update(Request $request, FaqCategory $faqCategory): RedirectResponse
@@ -40,13 +40,13 @@ class AdminFaqCategoryController extends Controller
 
         $this->service->updateCategory($request->user(), $faqCategory, $validated);
 
-        return redirect()->back()->with('success', 'Category updated successfully.');
+        return redirect()->back()->with('success', 'FAQ category updated.');
     }
 
     public function toggleStatus(Request $request, FaqCategory $faqCategory): RedirectResponse
     {
         $this->service->toggleCategoryStatus($request->user(), $faqCategory, !$faqCategory->is_active);
 
-        return redirect()->back()->with('success', 'Category status toggled successfully.');
+        return redirect()->back()->with('success', 'FAQ category visibility updated.');
     }
 }

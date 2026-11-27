@@ -47,7 +47,7 @@ class CheckoutReminderTest extends TestCase
             ->firstOrFail();
         $this->assertSame(CheckoutReminderNotification::class, $notification->type);
         $this->assertSame($reservation->id, $notification->data['reservation_id']);
-        $this->assertStringContainsString('20 minutes remain', $notification->data['message']);
+        $this->assertStringContainsString('about 20 minutes left', $notification->data['message']);
 
         $this->artisan('reservations:send-checkout-reminders')
             ->expectsOutput('Sent 0 checkout reminders.')

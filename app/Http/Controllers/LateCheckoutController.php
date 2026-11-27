@@ -27,7 +27,7 @@ class LateCheckoutController extends Controller
         ]);
         $service->request($reservation, $request->user(), (int) $data['hours'], (int) $data['fee_cents']);
 
-        return redirect()->route('customer.reservations.show', $reservation)->with('success', 'Late check-out requested. No fee is charged until staff approve it; your check out time is unchanged for now.');
+        return redirect()->route('customer.reservations.show', $reservation)->with('success', 'We received your late check-out request. Keep your original check-out time until we approve it. We’ll only add the fee if it’s approved.');
     }
 
     public function decide(Request $request, Reservation $reservation, LateCheckoutService $service): RedirectResponse

@@ -45,8 +45,7 @@
     x-show="visible"
     x-transition.opacity.duration.150ms
     {{ $attributes->merge(['class' => 'flex items-start gap-3 rounded-lg border p-4 ' . $classes]) }}
-    role="alert"
-    aria-live="polite"
+    role="{{ in_array($type, ['danger', 'error'], true) ? 'alert' : 'status' }}"
 >
     <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" d="{{ $iconPath }}" />

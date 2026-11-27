@@ -94,7 +94,7 @@ class CustomerPaymentController extends Controller
             // Retain the private proof when persistence is uncertain.
             report($e);
             return redirect()->route('customer.reservations.show', $reservation)
-                ->with('error', 'We could not finish updating the payment screen. Check your payment history or contact staff before submitting again. Do not transfer money again.');
+                ->with('error', 'We couldn’t update this page. Check your payment history or contact the resort before uploading your receipt again. Please don’t send another payment.');
         }
     }
 
@@ -131,7 +131,7 @@ class CustomerPaymentController extends Controller
             abort(403, $e->getMessage());
         } catch (PaymentGatewayException|\App\Exceptions\Payment\InvalidPaymentTransitionException $e) {
             return redirect()->route('customer.payments.index', $reservation)
-                ->with('error', $e->getMessage().' Your payment may still be processing — refresh this page in a few minutes.');
+                ->with('error', $e->getMessage().' Your payment may still be processing. Refresh this page in a few minutes.');
         }
 
         return redirect()->route('customer.payments.index', $reservation)

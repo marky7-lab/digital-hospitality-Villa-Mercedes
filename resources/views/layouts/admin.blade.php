@@ -95,7 +95,7 @@
             <x-admin.header :header="$header ?? null" />
 
             <main id="admin-main" tabindex="-1" class="flex-1 focus:outline-none">
-                <div class="mx-auto w-full max-w-[88rem] px-4 py-6 sm:px-6 lg:px-8">
+                <div class="mx-auto w-full max-w-[88rem] px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
                     @foreach (['success' => 'success', 'status' => 'success', 'error' => 'danger', 'warning' => 'warning'] as $flashKey => $flashVariant)
                         @if (session($flashKey))
                             <div class="mb-4">

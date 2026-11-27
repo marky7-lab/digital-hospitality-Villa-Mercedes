@@ -115,8 +115,8 @@ class NotificationEngineTest extends TestCase
         $mail = (new ReservationCreatedMail($reservation->fresh()->load('facility')))->toMail($this->customer)->render();
         $this->assertStringContainsString($reservation->reservation_code, $mail);
         // A request under review is copied as a request, not as a confirmed stay.
-        $this->assertStringContainsString('Here is a copy of your request', $mail);
-        $this->assertStringContainsString('still with staff for approval', $mail);
+        $this->assertStringContainsString('Thanks for sending your booking request.', $mail);
+        $this->assertStringContainsString('Our team is reviewing it.', $mail);
         $this->assertStringContainsString($this->facility->name, $mail);
         $this->assertStringContainsString('₱', $mail);
 
@@ -292,7 +292,7 @@ class NotificationEngineTest extends TestCase
         $approvedMail = (new ReservationStatusChangedMail($reservation->fresh()->load('facility')))
             ->toMail($this->customer)
             ->render();
-        $this->assertStringContainsString('Your stay is confirmed', $approvedMail);
+        $this->assertStringContainsString('Your booking is confirmed', $approvedMail);
         $this->assertStringContainsString($reservation->reservation_code, $approvedMail);
     }
 

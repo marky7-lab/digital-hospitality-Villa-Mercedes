@@ -17,6 +17,8 @@
         ->mapWithKeys(fn (\App\Enums\BookingServiceType $type) => [$type->value => $type->listingUrl()])
         ->all();
     $action = $destinations[$defaultType] ?? route('rooms');
+    $isPool = $defaultType === 'pool';
+    $isCottage = $defaultType === 'cottage';
 
     $today = now()->format('Y-m-d');
     $checkIn = request('check_in', request('checkin'));
@@ -43,6 +45,7 @@
         today: @js($today),
         get action() { return this.destinations[this.serviceType] || this.destinations.room; },
         get showsSession() { return this.serviceType === 'cottage'; },
+        get showsPoolInfo() { return this.serviceType === 'pool'; },
         get checkOutMin() { return this.checkIn || this.today; },
         init() {
             this.$watch('checkIn', (value) => {
@@ -69,8 +72,8 @@
             </select>
         </div>
 
-        <div>
-            <label for="availability-check-in" class="{{ $labelClasses }}">Date In</label>
+        <div x-show="!showsPoolInfo" @style(['display: none' => $isPool])>
+            <label for="availability-check-in" class="{{ $labelClasses }}" x-text="showsSession ? 'Visit date' : 'Date In'">{{ $isCottage ? 'Visit date' : 'Date In' }}</label>
             <input
                 type="date"
                 id="availability-check-in"
@@ -78,12 +81,14 @@
                 value="{{ $checkIn }}"
                 x-model="checkIn"
                 min="{{ $today }}"
+                @disabled($isPool)
+                :disabled="showsPoolInfo"
                 required
                 class="{{ $fieldClasses }}"
             >
         </div>
 
-        <div>
+        <div x-show="!showsSession && !showsPoolInfo" @style(['display: none' => $isCottage || $isPool])>
             <label for="availability-check-out" class="{{ $labelClasses }}">Date Out</label>
             <input
                 type="date"
@@ -92,12 +97,27 @@
                 value="{{ $checkOut }}"
                 x-model="checkOut"
                 :min="checkOutMin"
+                @disabled($isCottage || $isPool)
+                :disabled="showsSession || showsPoolInfo"
                 required
                 class="{{ $fieldClasses }}"
             >
         </div>
 
-        <div>
+        <input type="hidden" name="check_out" value="{{ $isCottage ? $checkIn : '' }}" :value="checkIn ?? ''"
+               @disabled(! $isCottage) :disabled="!showsSession">
+
+        <div x-show="showsSession" @style(['display: none' => ! $isCottage])>
+            <label for="availability-session" class="{{ $labelClasses }}">Swimming session</label>
+            <select id="availability-session" name="session" x-model="session" @disabled(! $isCottage) :disabled="!showsSession" class="{{ $fieldClasses }}">
+                <option value="">Any session</option>
+                @foreach($sessions as $swimmingSession)
+                    <option value="{{ $swimmingSession->slug }}" @selected($session === $swimmingSession->slug)>{{ $swimmingSession->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div x-show="!showsPoolInfo" @style(['display: none' => $isPool])>
             <label for="availability-guests" class="{{ $labelClasses }}">Guests</label>
             <input
                 type="number"
@@ -107,27 +127,23 @@
                 min="1"
                 max="500"
                 inputmode="numeric"
+                @disabled($isPool)
+                :disabled="showsPoolInfo"
                 required
                 class="{{ $fieldClasses }}"
             >
         </div>
 
-        <div>
+        <div x-show="!showsPoolInfo" @style(['display: none' => $isPool])>
             <span class="{{ $labelClasses }} invisible hidden lg:block" aria-hidden="true">Guests</span>
-            <button type="submit" class="{{ $buttonClasses }}">
+            <button type="submit" class="{{ $buttonClasses }}" @disabled($isPool) :disabled="showsPoolInfo">
                 {{ $submitLabel }}
             </button>
         </div>
-    </div>
-
-    <div x-show="showsSession" x-cloak class="mt-3 max-w-xs">
-        <label for="availability-session" class="{{ $labelClasses }}">Swimming session</label>
-        <select id="availability-session" name="session" x-model="session" x-bind:disabled="!showsSession" class="{{ $fieldClasses }}">
-            <option value="">Any session</option>
-            @foreach($sessions as $swimmingSession)
-                <option value="{{ $swimmingSession->slug }}" @selected($session === $swimmingSession->slug)>{{ $swimmingSession->name }}</option>
-            @endforeach
-        </select>
+        <div x-show="showsPoolInfo" @style(['display: none' => ! $isPool]) class="lg:col-span-4">
+            <p class="mb-2 text-sm text-text-muted">Pool entrance is paid at the gate.</p>
+            <a href="{{ route('resort.show') }}#cottage-reservations" class="inline-flex min-h-11 items-center font-semibold text-primary underline underline-offset-4">View pool hours and fees</a>
+        </div>
     </div>
 
     @if(request()->filled('min_capacity'))
@@ -138,7 +154,7 @@
     @endif
 
     @if($onHero)
-        <p class="mt-3 text-xs text-text-muted text-center sm:text-left">
+        <p x-show="!showsPoolInfo" @style(['display: none' => $isPool]) class="mt-3 text-xs text-text-muted text-center sm:text-left">
             Checking availability is free. Results show published starting rates; the exact total is calculated later.
         </p>
     @endif

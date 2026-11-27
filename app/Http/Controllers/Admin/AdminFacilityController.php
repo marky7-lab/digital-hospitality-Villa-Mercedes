@@ -126,7 +126,7 @@ class AdminFacilityController extends Controller
         }
 
         return redirect()->route('admin.facilities.show', $facility)
-            ->with('success', 'Facility created successfully.');
+            ->with('success', 'Space added.');
     }
 
     public function update(UpdateFacilityRequest $request, Facility $facility): RedirectResponse
@@ -176,7 +176,7 @@ class AdminFacilityController extends Controller
         );
 
         return redirect()->back()
-            ->with('success', 'Amenities updated successfully.');
+            ->with('success', 'Amenities updated.');
     }
 
     public function syncComponents(Request $request, Facility $facility): RedirectResponse
@@ -197,7 +197,7 @@ class AdminFacilityController extends Controller
         }
 
         return redirect()->back()
-            ->with('success', 'Package components updated successfully.');
+            ->with('success', 'Package details updated.');
     }
 
     public function destroy(Request $request, Facility $facility): RedirectResponse
@@ -205,7 +205,7 @@ class AdminFacilityController extends Controller
         $this->service->deleteFacility($request->user(), $facility);
 
         return redirect()->route('admin.facilities.index')
-            ->with('success', 'Facility archived successfully.');
+            ->with('success', 'Space archived.');
     }
 
     public function destroyImage(Request $request, Facility $facility, GalleryImage $image): RedirectResponse
@@ -217,6 +217,6 @@ class AdminFacilityController extends Controller
         }
 
         return redirect()->back()
-            ->with('success', 'Image deleted successfully.');
+            ->with('success', 'Image deleted.');
     }
 }

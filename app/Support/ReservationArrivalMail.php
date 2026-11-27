@@ -27,7 +27,6 @@ class ReservationArrivalMail
                 // Symbol included, because an email body cannot render <x-amount>:
                 // this is the same string the guest sees on the page.
                 'totalPrice' => Money::of($reservation->total_price),
-                'policyVersion' => $reservation->policy_version,
                 'confirmedPolicy' => $reservation->policy_version === config('resort.policy.confirmed_version'),
                 'verifiedPaid' => Money::of($reservation->getVerifiedTotalPaid()),
                 'remainingBalance' => Money::of($reservation->getRemainingBalance()),

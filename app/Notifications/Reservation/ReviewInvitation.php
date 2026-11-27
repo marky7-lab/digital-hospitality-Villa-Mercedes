@@ -17,8 +17,11 @@ class ReviewInvitation extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)->subject('How was your visit to Villa Mercedes?')
-            ->line('Thank you for visiting. You can share an honest rating and optional feedback about your experience.')
-            ->line('You choose whether staff may publish your review. There is no obligation to respond.')
-            ->action('Rate your experience', route('customer.reservations.show', $this->reservation).'#review');
+            ->greeting('Hello!')
+            ->line('Thank you for visiting Villa Mercedes. We’d love to hear what you enjoyed and what we could do better.')
+            ->line('If you’d like to share feedback, give your visit a star rating and add a comment if you wish.')
+            ->line('You can share your feedback with resort staff only, or let us post it on our website with your first name and last initial.')
+            ->action('Rate your visit', route('customer.reservations.show', $this->reservation).'#review')
+            ->salutation('Warm wishes,  '."\n".'The Villa Mercedes team');
     }
 }

@@ -24,6 +24,6 @@ class ReviewController extends Controller
             $review->save();
             activity()->performedOn($review)->causedBy($request->user())->event('guest_review_submitted')->log('Post-stay feedback submitted for moderation.');
         }, 5);
-        return redirect()->route('customer.reservations.show', $reservation)->with('success', 'Thank you for sharing your experience. Your feedback was sent to the resort.');
+        return redirect()->route('customer.reservations.show', $reservation)->with('success', 'Thanks for sharing your feedback. The resort team has received it.');
     }
 }

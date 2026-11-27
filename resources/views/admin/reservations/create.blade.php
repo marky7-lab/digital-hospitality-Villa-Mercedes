@@ -110,7 +110,7 @@
                         <div>
                             <label for="guest_phone" class="admin-label">Contact number <span class="text-danger" aria-hidden="true">*</span></label>
                             <input type="tel" name="guest_phone" id="guest_phone" value="{{ old('guest_phone') }}" required minlength="11" maxlength="11"
-                                   inputmode="numeric" autocomplete="tel" pattern="09[0-9]{9}" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" aria-required="true" @error('guest_phone') aria-invalid="true" @enderror class="admin-input mt-1">
+                                   inputmode="numeric" autocomplete="tel" pattern="09[0-9]{9}" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." data-ph-mobile aria-required="true" @error('guest_phone') aria-invalid="true" @enderror class="admin-input mt-1">
                             <x-input-error class="mt-1" :messages="$errors->get('guest_phone')" />
                         </div>
 

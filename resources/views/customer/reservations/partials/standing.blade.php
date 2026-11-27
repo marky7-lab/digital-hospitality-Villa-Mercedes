@@ -4,7 +4,7 @@
     $remaining = $reservation->getRemainingBalance();
     $paymentState = $reservation->guestPaymentState();
     $deadline = $reservation->deposit_due_at?->copy()->timezone('Asia/Manila');
-    $paymentsUrl = route('customer.payments.index', $reservation);
+    $paymentsUrl = route('customer.payments.index', [$reservation, ...request()->only('tab', 'page')]);
     $refund = ($reservation->reservationGroup?->booking_workflow ?? $reservation->booking_workflow ?? [])['refund'] ?? null;
 @endphp
 

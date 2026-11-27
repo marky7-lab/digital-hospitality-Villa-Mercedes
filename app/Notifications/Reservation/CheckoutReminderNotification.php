@@ -21,8 +21,7 @@ class CheckoutReminderNotification extends Notification
             'reservation_code' => $this->reservation->reservation_code,
             'checkout_reminder' => true,
             'checkout_at' => $this->reservation->occupancyEnd()->toDateTimeString(),
-            'message' => 'Checkout reminder: 20 minutes remain before your scheduled checkout at '
-                .$this->reservation->occupancyEnd()->format('g:i A').'.',
+            'message' => 'Your check-out time is '.$this->reservation->occupancyEnd()->format('g:i A').'. You have about 20 minutes left.',
         ];
     }
 }

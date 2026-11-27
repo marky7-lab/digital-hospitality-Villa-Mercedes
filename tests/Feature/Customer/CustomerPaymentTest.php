@@ -94,6 +94,26 @@ class CustomerPaymentTest extends TestCase
         $response->assertSee($this->reservation->reservation_code);
     }
 
+    public function test_payment_navigation_preserves_the_reservation_list_context(): void
+    {
+        $context = ['tab' => 'upcoming', 'page' => 2];
+        $record = [$this->reservation, ...$context];
+        $paymentUrl = route('customer.payments.index', $record);
+
+        $this->actingAs($this->customer1)
+            ->get(route('customer.reservations.show', $record))
+            ->assertOk()
+            ->assertSee($paymentUrl);
+
+        $this->get($paymentUrl)
+            ->assertOk()
+            ->assertSee(route('customer.reservations.index', $context))
+            ->assertSee(route('customer.reservations.show', $record))
+            ->assertSee(route('customer.reservations.show', [
+                $this->reservation, 'view' => 'arrival', ...$context,
+            ]));
+    }
+
     public function test_customer_cannot_access_another_customers_payment_page()
     {
         $response = $this->actingAs($this->customer2)

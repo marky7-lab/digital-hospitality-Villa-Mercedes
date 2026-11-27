@@ -5,7 +5,7 @@
         <svg aria-hidden="true" focusable="false" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2" /><path stroke-linecap="round" d="M8 11V8a4 4 0 018 0v3" /></svg>
     </span>
     <x-text-input :id="$id" {{ $attributes->class('block min-h-11 w-full rounded-xl ps-11 pe-14') }}
-                  type="password" x-bind:type="revealed ? 'text' : 'password'" spellcheck="false" />
+                  type="password" data-custom-password-reveal x-bind:type="revealed ? 'text' : 'password'" spellcheck="false" />
     <button type="button"
             x-cloak
             class="absolute inset-y-0 end-0 inline-flex min-h-11 min-w-11 items-center justify-center rounded-e-xl bg-transparent text-text-muted hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"

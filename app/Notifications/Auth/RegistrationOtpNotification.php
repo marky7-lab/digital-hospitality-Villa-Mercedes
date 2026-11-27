@@ -54,11 +54,11 @@ class RegistrationOtpNotification extends Notification implements ShouldQueue, S
     {
         return (new MailMessage)
             ->subject('Your '.config('resort.short_name').' verification code')
-            ->greeting(config('resort.name'))
-            ->line('Your verification code is:')
+            ->greeting('Hello!')
+            ->line('Enter this code on the sign-up page to confirm your email address.')
             ->line($this->code)
             ->line("This code expires in {$this->expireMinutes} minutes.")
-            ->line('If you did not request this code, you can ignore this email.')
-            ->salutation('See you at the resort,'.PHP_EOL.config('resort.short_name'));
+            ->line('If you didn’t ask for this code, you can ignore this email. Please keep the code to yourself.')
+            ->salutation('The '.config('resort.short_name').' team');
     }
 }

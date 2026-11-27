@@ -33,9 +33,9 @@ class ReservationCreatedMail extends Notification implements ShouldQueue
         // A request that is still under review must not read like a booking: what
         // the guest was told at submission is what this copy repeats.
         $intro = match (true) {
-            $this->reservation->status === ReservationStatus::Approved => 'Here is a copy of your reservation. Keep this email for your check in — you do not need to sign in at the front desk.',
-            config('payments.deposit_workflow') => 'Here is a copy of your request — it is waiting in Review pending. We email you as soon as the resort verifies your request and payment.',
-            default => 'Here is a copy of your request — it is still with staff for approval. We email you as soon as it is confirmed.',
+            $this->reservation->status === ReservationStatus::Approved => 'Thanks for booking with us. Keep this email handy to show at the front desk when you arrive.',
+            config('payments.deposit_workflow') => 'Thanks for sending your booking request. Our team will review it and check your payment. We’ll email you when there’s an update.',
+            default => 'Thanks for sending your booking request. Our team is reviewing it. We’ll email you when your booking is confirmed.',
         };
 
         return ReservationArrivalMail::message($this->reservation, $intro);

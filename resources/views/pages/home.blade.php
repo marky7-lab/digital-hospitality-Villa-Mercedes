@@ -24,7 +24,7 @@
                 <p class="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-accent-light">
                     {{ config('resort.location') }}
                 </p>
-                <h1 class="mt-5 font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.08] tracking-tight drop-shadow text-balance">
+                <h1 class="mt-5 font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold leading-[1.08] tracking-tight drop-shadow text-balance">
                     {{ config('resort.name') }}
                 </h1>
                 <p class="mt-6 text-base sm:text-lg text-white/95 max-w-3xl mx-auto leading-relaxed">
@@ -53,7 +53,7 @@
 
 
         {{-- Service cards --}}
-        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" x-reveal>
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20" x-reveal>
             <x-section-heading title="What brings you here?" class="mb-12">
                 Choose a space, check dates, and review the reservation requirements.
             </x-section-heading>
@@ -115,7 +115,7 @@
 
         {{-- Trust bar — real resort stats, not marketing fiction. --}}
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8" x-reveal>
-            <dl class="grid grid-cols-2 lg:grid-cols-4 gap-8 border-y border-border py-12">
+            <dl class="grid grid-cols-2 lg:grid-cols-4 gap-4 border-y border-border py-8 sm:gap-8 sm:py-12">
                 @foreach(config('resort.stats') as $stat)
                     <div class="text-center">
                         <dt class="font-heading text-3xl sm:text-4xl font-semibold text-primary">{{ $stat['value'] }}</dt>
@@ -127,7 +127,7 @@
 
         {{-- This requests just three compact room cards when the section nears view. --}}
         <section
-            class="bg-surface py-20"
+            class="bg-surface py-12 sm:py-20"
             data-home-featured
             data-home-featured-endpoint="{{ route('home.featured') }}"
             data-home-featured-fallback-url="{{ route('rooms') }}"
@@ -153,10 +153,10 @@
         </section>
 
         {{-- How to reserve --}}
-        <section class="bg-background py-20" x-reveal>
+        <section class="bg-background py-12 sm:py-20" x-reveal>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <x-section-heading title="How to reserve your stay" class="mb-12">
-                    Check dates and review the total before submitting a request.
+                    Check availability, review your total, and follow your booking in My Reservations.
                 </x-section-heading>
 
                 <ol class="grid grid-cols-1 gap-6 md:grid-cols-5">
@@ -172,25 +172,25 @@
                     </li>
                     <li class="border-t border-border pt-5 text-left">
                         <span class="block text-xs font-semibold tracking-[0.18em] text-accent">03</span>
-                        <h3 class="mt-3 text-lg font-bold text-text">Submit request</h3>
-                        <p class="mt-2 text-sm text-text-muted">Review the live total and send the reservation request. Nothing is charged yet.</p>
+                        <h3 class="mt-3 text-lg font-bold text-text">Pay and submit</h3>
+                        <p class="mt-2 text-sm text-text-muted">Review your total and choose a 50% down payment or full payment. Transfer the amount shown, then upload your receipt when you submit your booking.</p>
                     </li>
                     <li class="border-t border-border pt-5 text-left">
                         <span class="block text-xs font-semibold tracking-[0.18em] text-accent">04</span>
-                        <h3 class="mt-3 text-lg font-bold text-text">Resort approval</h3>
-                        <p class="mt-2 text-sm text-text-muted">Your request waits under Review pending while the resort reviews it. We email you the answer either way &mdash; no money is due until it is approved.</p>
+                        <h3 class="mt-3 text-lg font-bold text-text">Track your booking</h3>
+                        <p class="mt-2 text-sm text-text-muted">Check Review pending in My Reservations while staff verify your payment and review your booking. Once approved, open your confirmed reservation for your check-in pass.</p>
                     </li>
                     <li class="border-t border-border pt-5 text-left">
                         <span class="block text-xs font-semibold tracking-[0.18em] text-accent">05</span>
-                        <h3 class="mt-3 text-lg font-bold text-text">Deposit and check in</h3>
-                        <p class="mt-2 text-sm text-text-muted">Once approved, scan the resort QR, transfer the 50% deposit, and upload your proof before the deadline. Staff verify the transfer and issue your check in pass &mdash; the remaining balance is paid at the resort.</p>
+                        <h3 class="mt-3 text-lg font-bold text-text">Check in at the resort</h3>
+                        <p class="mt-2 text-sm text-text-muted">Show your check-in pass when you arrive and settle any remaining balance before checking in.</p>
                     </li>
                 </ol>
             </div>
         </section>
 
         {{-- Mission & vision --}}
-        <section id="mission" class="bg-surface py-20 scroll-mt-24" x-reveal>
+        <section id="mission" class="bg-surface py-12 sm:py-20 scroll-mt-24" x-reveal>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                 <div class="relative pb-8">
                     <img
@@ -325,7 +325,7 @@
 
         {{-- FAQ teaser from the live catalog --}}
         @if($homeFaqs->isNotEmpty())
-            <section class="bg-background py-20 scroll-mt-24" id="faqs" x-reveal>
+            <section class="bg-background py-12 sm:py-20 scroll-mt-24" id="faqs" x-reveal>
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
                     <div class="max-w-md">
                         <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-accent">GOOD TO KNOW</p>
@@ -362,7 +362,7 @@
         @endif
 
         {{-- Hours + map --}}
-        <section class="bg-surface py-16" x-reveal>
+        <section class="bg-surface py-10 sm:py-16" x-reveal>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-start">
                 <div class="space-y-8">
                     <div>

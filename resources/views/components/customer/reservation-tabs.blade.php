@@ -12,16 +12,17 @@
     // fourth question — it is linked from Arrival, where a guest needs it.
     $active = $recordView ?? \App\Enums\ReservationRecordView::fromQuery(request()->query('view'));
     $onPayments = request()->routeIs('customer.payments.*');
+    $listContext = request()->only('tab', 'page');
 
     $tabs = collect(\App\Enums\ReservationRecordView::cases())
         ->map(fn ($facet) => [
             'label' => $facet->label(),
-            'href' => $facet->url($reservation),
+            'href' => url()->query($facet->url($reservation), $listContext),
             'active' => ! $onPayments && $active === $facet,
         ])
         ->push([
             'label' => 'Payments',
-            'href' => route('customer.payments.index', $reservation),
+            'href' => route('customer.payments.index', [$reservation, ...$listContext]),
             'active' => $onPayments,
         ]);
 @endphp

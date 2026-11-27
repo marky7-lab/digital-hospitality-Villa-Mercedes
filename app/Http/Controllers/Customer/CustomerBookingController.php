@@ -365,7 +365,7 @@ class CustomerBookingController extends Controller
     {
         BookingDraft::forget($facility);
 
-        return back()->with('success', 'Unfinished booking discarded. Nothing was held, so nothing was lost but the typing.');
+        return back()->with('success', 'We removed your unfinished booking.');
     }
 
     /**
@@ -382,10 +382,10 @@ class CustomerBookingController extends Controller
         $user = $request->user();
 
         if (! $this->resumeLinks->sendNow($user, $facility)) {
-            return back()->with('error', 'We could not email that link right now. Your booking is still on this page — try again in a moment, or keep this tab open.');
+            return back()->with('error', 'We couldn’t email your booking link. Your details are still here. You can keep going or try sending the link again in a moment.');
         }
 
-        return back()->with('success', 'Sent to '.$user->email.'. Open it on any device to finish from the confirm step.');
+        return back()->with('success', 'Sent to '.$user->email.'. Open the email to pick up where you left off.');
     }
 
     public function sendMagicLink(SendBookingMagicLinkRequest $request, Facility $facility): RedirectResponse

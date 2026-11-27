@@ -108,7 +108,7 @@ class AdminRateController extends Controller
         }
 
         return redirect()->route('admin.facilities.show', $facility)
-            ->with('success', 'Rate created successfully.');
+            ->with('success', 'Rate added.');
     }
 
     public function update(SaveRateRequest $request, Rate $rate): RedirectResponse
@@ -123,7 +123,7 @@ class AdminRateController extends Controller
         }
 
         return redirect()->route('admin.rates.show', $rate)
-            ->with('success', 'Rate updated successfully.');
+            ->with('success', 'Rate updated.');
     }
 
     public function activate(Request $request, Rate $rate): RedirectResponse

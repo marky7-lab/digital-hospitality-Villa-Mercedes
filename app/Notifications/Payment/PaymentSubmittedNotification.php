@@ -3,6 +3,7 @@
 namespace App\Notifications\Payment;
 
 use App\Models\Payment;
+use App\Support\Money;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
@@ -34,7 +35,7 @@ class PaymentSubmittedNotification extends Notification implements ShouldQueue
             'amount' => $this->payment->amount,
             'method' => $this->payment->method?->value ?? 'manual',
             'status' => $this->payment->status?->value ?? 'pending',
-            'message' => "A new payment of {$this->payment->amount} was submitted for booking {$code}.",
+            'message' => 'A payment of '.Money::of($this->payment->amount)." for booking {$code} is ready for review.",
         ];
     }
 }

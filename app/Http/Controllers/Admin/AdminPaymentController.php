@@ -208,12 +208,12 @@ class AdminPaymentController extends Controller
         if ($payment->reservation_group_id) {
             return redirect()
                 ->route('admin.reservation-groups.show', $payment->reservation_group_id)
-                ->with('success', 'Group payment verified. The booking group ledger and balance are updated.');
+                ->with('success', 'Group payment verified. The guest can see the updated balance.');
         }
 
         return redirect()
             ->route('admin.reservations.show', $payment->reservation_id)
-            ->with('success', 'Payment verified. The reservation ledger and customer balance are updated.');
+            ->with('success', 'Payment verified. The guest can see the updated balance.');
     }
 
     public function reject(Request $request, Payment $payment): RedirectResponse
@@ -249,7 +249,7 @@ class AdminPaymentController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return back()->with('success', 'Deposit top-up requested. The customer can see the amount and new deadline.');
+        return back()->with('success', 'The guest can now see the additional deposit amount and its new deadline.');
     }
 
     public function viewProof(Payment $payment): StreamedResponse

@@ -364,14 +364,15 @@ class ConfirmedBookingPracticesTest extends TestCase
             'total_amount' => 1000, 'deposit_required' => 500, 'policy_version' => config('resort.policy.confirmed_version')]);
         $mail = (new \App\Notifications\Reservation\GroupQuotationProvidedMail($group))->toMail($this->guest);
         $html = app(\Illuminate\Mail\Markdown::class)->render($mail->markdown, $mail->viewData)->toHtml();
-        $this->assertStringContainsString('2026-10-confirmed-v1', $html);
-        $this->assertStringContainsString('100% online payment', $html);
-        $this->assertStringContainsString('Request, approval, and money returned are separate stages', $html);
+        $this->assertStringContainsString('pay in full online', $html);
+        $this->assertStringContainsString('ask for a full refund', $html);
+        $this->assertStringContainsString('The resort owner approves refund requests.', $html);
+        $this->assertStringContainsString('We record when your refund is sent.', $html);
         $group->update(['policy_version' => '2026-09-v2']);
         $mail = (new \App\Notifications\Reservation\GroupQuotationProvidedMail($group))->toMail($this->guest);
         $html = app(\Illuminate\Mail\Markdown::class)->render($mail->markdown, $mail->viewData)->toHtml();
-        $this->assertStringContainsString('historical policy', $html);
-        $this->assertStringNotContainsString('verified payments qualify for full refund', $html);
+        $this->assertStringContainsString('The prices and terms already agreed for your booking still apply.', $html);
+        $this->assertStringNotContainsString('ask for a full refund', $html);
     }
 
     public function test_single_service_quote_and_submission_keep_child_counts_and_one_pet_fee(): void

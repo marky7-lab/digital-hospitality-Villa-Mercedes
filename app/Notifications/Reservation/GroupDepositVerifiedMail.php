@@ -45,14 +45,14 @@ class GroupDepositVerifiedMail extends Notification implements ShouldQueue
         })->all();
 
         return (new MailMessage)
-            ->subject('Group deposit verified for booking ' . $this->group->group_code)
+            ->subject('We verified your deposit for group booking ' . $this->group->group_code)
             ->markdown('mail.group-deposit-verified', [
                 'guestName' => $this->group->guest_name,
                 'groupCode' => $this->group->group_code,
                 'amountPaid' => Money::of($this->payment->amount),
-                'policyVersion' => $this->group->policy_version,
+                'confirmedPolicy' => $this->group->policy_version === config('resort.policy.confirmed_version'),
                 'approved' => $this->group->isApproved(),
-                'referenceNumber' => $this->payment->reference_number ?: 'Verified Transfer',
+                'referenceNumber' => $this->payment->reference_number ?: 'See your booking',
                 'remainingBalance' => Money::of($this->group->outstandingBalance()),
                 'lines' => $lines,
                 'url' => route('customer.reservations.index', ['group' => $this->group->group_code]),

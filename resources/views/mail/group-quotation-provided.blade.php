@@ -1,43 +1,42 @@
 <x-mail::message>
-# Quotation for Group Booking {{ $groupCode }}
+# Your quote for group booking {{ $groupCode }}
 
 Hello {{ $guestName }},
 
-Staff at {{ config('resort.name') }} have reviewed your quotation request for group booking **{{ $groupCode }}**.
+Thanks for planning your visit with us. Your quote is ready for group booking **{{ $groupCode }}**.
 
 <x-mail::panel>
-**Total Quoted Rate: {{ $quotedTotal }}**  
-**Required 50% Down Payment: {{ $depositRequired }}**
+**Total price: {{ $quotedTotal }}**  
+**50% deposit: {{ $depositRequired }}**
 </x-mail::panel>
 
 @if(filled($notes))
-**Staff Notes & Inclusions:**  
+**Notes from the resort**  
 {{ $notes }}
 @endif
 
-**Services in your request:**  
+**What’s in your request**  
 @foreach($lines as $line)
 - **{{ $line['name'] }}**: {{ $line['schedule'] }} ({{ $line['guests'] }} guest(s))
 @endforeach
 
-Accepted policy: {{ $policyVersion ?? 'Historical saved terms' }}.
+
 
 @if($confirmedPolicy ?? false)
-Review the complete quotation and choose at least the 50% down payment or 100% online payment. Proof stays under review until verified; staff approval is still required. Any remaining balance is due at physical check-in.
+Open your quote to pay a deposit of at least 50% or pay in full online. Upload your payment receipt so our team can check it. We’ll review your booking before confirming it. Any remaining balance is due at check-in.
 
-Before physical check-in, including no-show, verified payments qualify for full refund. Staff receive the request and notify the owner; the owner approves refunds; administrators record that approval and the funds returned. Request, approval, and money returned are separate stages. Rescheduling has no notice deadline before physical check-in, subject to availability, revised quote, and guest acceptance.
+You can cancel and ask for a full refund of payments we’ve verified before you check in, even if you miss your visit. The resort owner approves refund requests. We record when your refund is sent. You can ask to change dates any time before check-in. We’ll check availability and share an updated price for you to accept.
 @else
-This quotation retains its saved prices and accepted terms. Contact staff to review the historical policy before paying.
+The prices and terms already agreed for your booking still apply. Please contact us if you’d like to review them before paying.
 @endif
 
 <x-mail::button :url="$url">
-Review Quote & Pay Deposit
+View quote and payment options
 </x-mail::button>
 
 @if($resortPhone)
 Questions? Call us at [{{ $resortPhone }}]({{ $resortPhoneHref }}).
 @endif
 
-Thanks,<br>
-{{ config('resort.short_name') }}
+The {{ config('resort.short_name') }} team
 </x-mail::message>

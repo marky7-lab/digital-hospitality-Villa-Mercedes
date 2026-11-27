@@ -189,7 +189,7 @@ class PanelistWorkflowGapsTest extends TestCase
         $this->assertInstanceOf(ShouldQueue::class, $notification);
         $this->assertTrue($notification->shouldSend($this->guest, 'mail'));
         $text = implode(' ', $notification->toMail($this->guest)->introLines);
-        $this->assertStringContainsString('Verified', $text);
+        $this->assertStringContainsString('checked and recorded your payment', $text);
         $this->assertStringContainsString('₱500.00', $text);
         $this->assertStringContainsString($reservation->reservation_code, $text);
         $this->request($reservation);
@@ -198,7 +198,7 @@ class PanelistWorkflowGapsTest extends TestCase
         $this->assertInstanceOf(ShouldQueue::class, $decision);
         $text = implode(' ', $decision->toMail($this->guest)->introLines);
         $this->assertStringContainsString('₱300.00', $text);
-        $this->assertStringContainsString('does not mean this fee has been paid', $text);
+        $this->assertStringContainsString('to the amount you still owe', $text);
         $payment->update(['status' => PaymentStatus::Rejected]);
         $this->assertFalse($notification->shouldSend($this->guest, 'mail'));
     }

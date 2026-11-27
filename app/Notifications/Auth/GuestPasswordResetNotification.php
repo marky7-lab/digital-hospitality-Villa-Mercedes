@@ -22,7 +22,7 @@ class GuestPasswordResetNotification extends ResetPassword implements ShouldQueu
             ->line('Use the button below to choose a new password for your '.config('resort.short_name').' account.')
             ->action('Choose a new password', $url)
             ->line("This link expires in {$minutes} minutes.")
-            ->line('If you did not request a reset, you can ignore this email. Your password stays the same.')
-            ->salutation(config('resort.short_name'));
+            ->line('If you didn’t ask for a new password, you can ignore this email. Your current password will still work.')
+            ->salutation('The '.config('resort.short_name').' team');
     }
 }

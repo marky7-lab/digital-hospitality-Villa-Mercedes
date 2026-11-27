@@ -9,12 +9,12 @@
     // One container vocabulary for the whole back office: 12px radius, a
     // hairline border, no shadow. Elevation is declared once (border only), so
     // a panel never becomes a "ghost card" with both a border and a soft glow.
-    $bodyClasses = $padding ? 'p-5' : '';
+    $bodyClasses = $padding ? 'p-3.5 sm:p-5' : '';
 @endphp
 
 <section {{ $attributes->class(['overflow-hidden rounded-xl border border-border bg-surface']) }}>
     @if ($title || isset($actions) || $description)
-        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-border bg-muted/40 px-5 py-4">
+        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-border bg-muted/40 px-3.5 py-3 sm:px-5 sm:py-4">
             <div class="min-w-0">
                 @if ($title)
                     {{-- Counts sit beside the heading rather than in the action row,
@@ -37,7 +37,7 @@
             </div>
 
             @isset($actions)
-                <div class="flex shrink-0 flex-wrap items-center gap-2">
+                <div class="flex min-w-0 max-w-full flex-wrap items-center gap-2">
                     {{ $actions }}
                 </div>
             @endisset

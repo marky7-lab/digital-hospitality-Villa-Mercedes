@@ -187,10 +187,10 @@ const bindLivePanel = (root) => {
             if (addedCount > 0) {
                 const alertTitle = noun === 'request'
                     ? `${addedCount} new booking request${addedCount > 1 ? 's' : ''}`
-                    : `Action required: new items waiting`;
+                    : 'New items for the front desk';
                 const alertBody = noun === 'request'
-                    ? `Review pending requests on the Villa Mercedes dashboard.`
-                    : `Check the front desk attention items.`;
+                    ? 'Open the dashboard to review the new booking requests.'
+                    : 'Open the front desk dashboard to see what needs your attention.';
 
                 triggerShiftAlert({ title: alertTitle, body: alertBody });
             }

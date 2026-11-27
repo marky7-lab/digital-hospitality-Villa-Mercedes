@@ -31,19 +31,20 @@ class VerifiedPaymentReceipt extends Notification implements ShouldQueue
         $payment = $this->payment->fresh() ?? $this->payment;
         $reservation = $payment->reservation;
         $group = $payment->reservationGroup;
-        $mail = (new MailMessage)->subject('Verified payment receipt: '.($reservation?->reservation_code ?? $group?->group_code))
-            ->line('Payment status: Verified. Recorded paid amount: '.Money::of($payment->amount).'.');
+        $mail = (new MailMessage)->subject('Your payment receipt for booking '.($reservation?->reservation_code ?? $group?->group_code))
+            ->line('Thank you. We’ve checked and recorded your payment of '.Money::of($payment->amount).'.');
         $lines = $reservation ? collect([$reservation]) : $group->reservations;
         foreach ($lines as $line) {
             $mail->line($line->reservation_code.' — '.$line->facility?->name);
-            $mail->line('Accepted policy: '.$line->policy_version.'. Refund request, owner approval, and money returned are separate records.');
+            $mail->line('Booking terms: '.$line->policy_version.'.');
             foreach ($line->priceItems() as $label => $cents) {
                 $mail->line($label.': '.Money::of($cents / 100));
             }
         }
 
-        return $mail->line('Current booking balance: '.Money::of($reservation ? $reservation->getRemainingBalance() : $group->outstandingBalance()))
-            ->line('Itemization describes your current agreed booking. Only verified funds count as paid. This receipt is not a booking approval or a tax invoice.')
-            ->action('View itemized receipt', route('customer.payments.receipt', $payment));
+        return $mail->line('Remaining balance: '.Money::of($reservation ? $reservation->getRemainingBalance() : $group->outstandingBalance()))
+            ->line('This receipt shows the payment we checked. See your booking for its confirmation status. For a tax invoice, please contact the resort.')
+            ->action('View full receipt', route('customer.payments.receipt', $payment))
+            ->salutation('The '.config('resort.short_name').' team');
     }
 }

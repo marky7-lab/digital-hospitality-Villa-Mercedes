@@ -41,6 +41,8 @@ yarn-error.log
 
 # Local caches, test artifacts, and generated report exports.
 /storage/node-compile-cache/
+/storage/framework/node-compile-cache/
+/storage/framework/mwg-guide-*.md
 /tmp/
 /tmp-*.log
 /output/pdf/

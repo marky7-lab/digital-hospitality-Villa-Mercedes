@@ -50,15 +50,15 @@ final class BookingResumeLink
      */
     private const EARLY_TOLERANCE_SECONDS = 5;
 
-    public const EXPIRED_MESSAGE = 'That link is no longer active — it may have expired, or the booking may already have been finished. Nothing was held, so pick your space and dates again.';
+    public const EXPIRED_MESSAGE = 'This link is no longer available. If you already booked, check My Reservations. To start a new booking, choose your space and dates again.';
 
-    public const COMPLETED_MESSAGE = 'This booking is already finished — here it is.';
+    public const COMPLETED_MESSAGE = 'You already finished this booking. Here are the details.';
 
-    public const SPACE_GONE_MESSAGE = 'That space can no longer be reserved online. Here is everything else.';
+    public const SPACE_GONE_MESSAGE = 'This space is no longer available to book online. You can choose another space.';
 
-    public const STALE_MESSAGE = 'Those dates have passed, so there is nothing left to finish. Choose a new stay and we will check availability again.';
+    public const STALE_MESSAGE = 'Your original booking dates have passed. Choose new dates to see what’s available.';
 
-    public const RESTORED_MESSAGE = 'Welcome back — your booking is filled in and ready to confirm. Nothing is held until you confirm.';
+    public const RESTORED_MESSAGE = 'Welcome back. We filled in your saved details. Review them and confirm your booking when you’re ready.';
 
     /**
      * A guest has just had the confirm step priced.

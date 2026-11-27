@@ -35,6 +35,11 @@
     display: none !important;
 }
 
+/* Edge adds its own eye to password fields while typing. */
+input[data-custom-password-reveal]::-ms-reveal {
+    display: none;
+}
+
 /* The chat panel and launcher swap visibility at runtime. Keep the native
    hidden state authoritative even when an element also has a display utility. */
 [hidden] {
@@ -660,15 +665,6 @@ span.flatpickr-weekday.flatpickr-weekday {
 .flatpickr-time.flatpickr-time .numInputWrapper.numInputWrapper span.arrowDown:after { border-top-color: theme('colors.text.muted'); }
 .flatpickr-time.flatpickr-time .numInputWrapper.numInputWrapper span svg path { fill: theme('colors.text.muted'); }
 .flatpickr-time.flatpickr-time .numInputWrapper.numInputWrapper:hover { background: theme('colors.muted.DEFAULT'); }
-/* Keep the booking filters scrollable without a second visible bar below them. */
-.booking-category-tabs {
-    scrollbar-width: none;
-}
-
-.booking-category-tabs::-webkit-scrollbar {
-    display: none;
-}
-
 /* Booking has its own help link; keep the floating launcher off form controls. */
 body:has([data-unified-booking-workspace]) [data-support-chat] {
     display: none;

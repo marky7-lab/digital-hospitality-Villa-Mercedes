@@ -63,6 +63,6 @@ class AdminAuthenticatedSessionController extends Controller
         $this->staffSessions->end($request, $request->user());
 
         return redirect()->route('admin.login')
-            ->with('status', 'You have been signed out of the back office.');
+            ->with('status', 'You’re signed out of the staff area.');
     }
 }

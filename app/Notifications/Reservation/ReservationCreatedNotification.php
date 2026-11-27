@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Reservation;
 
+use App\Enums\ReservationStatus;
 use App\Models\Reservation;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Notifications\Notification;
@@ -40,9 +41,11 @@ class ReservationCreatedNotification extends Notification
             'customer_name' => $this->isAdminNotification ? ($this->reservation->user->name ?? 'Unknown') : null,
             'total_price' => $this->reservation->total_price,
             'is_admin_notification' => $this->isAdminNotification,
-            'message' => $this->isAdminNotification
-                ? "New reservation {$this->reservation->reservation_code} created."
-                : "Your reservation {$this->reservation->reservation_code} has been successfully placed.",
+            'message' => match (true) {
+                $this->isAdminNotification => "New booking {$this->reservation->reservation_code}. Open it to see the details.",
+                $this->reservation->status === ReservationStatus::Approved => "Your booking {$this->reservation->reservation_code} is confirmed.",
+                default => "We received your booking request {$this->reservation->reservation_code}. Our team will review it.",
+            },
         ];
     }
 }

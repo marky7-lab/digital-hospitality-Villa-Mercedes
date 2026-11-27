@@ -21,7 +21,7 @@ class PasswordResetLinkController extends Controller
     {
         if (! OutboundMail::isConfigured()) {
             return back()->withInput($request->only('email'))
-                ->withErrors(['email' => 'Password reset emails are unavailable right now. Please try again later or call the resort.']);
+                ->withErrors(['email' => 'We can’t send password reset emails right now. Please try again later or call the resort for help.']);
         }
 
         try {
@@ -46,6 +46,6 @@ class PasswordResetLinkController extends Controller
 
         return back()
             ->withInput($request->only('email'))
-            ->with('status', 'If this email belongs to an account, check its inbox and spam folder for a password reset link.');
+            ->with('status', 'If you have an account with this email address, look for a password reset link in your inbox. Check your spam folder if you don’t see it.');
     }
 }

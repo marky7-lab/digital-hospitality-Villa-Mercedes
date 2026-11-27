@@ -28,11 +28,11 @@ class BookingMagicLinkNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject('Confirm your '.config('resort.short_name').' reservation')
-            ->greeting(config('resort.name'))
-            ->line('Use this link to confirm your reservation. Nothing is charged when you confirm.')
+            ->greeting('Hello!')
+            ->line('Thanks for choosing Villa Mercedes. Use the button below to confirm your reservation. There is no charge when you use this link.')
             ->action('Confirm reservation', $this->url)
             ->line("This link expires in {$this->expireMinutes} minutes.")
             ->line('If you did not start a reservation, you can ignore this email.')
-            ->salutation('See you at the resort,'.PHP_EOL.config('resort.short_name'));
+            ->salutation('The '.config('resort.short_name').' team');
     }
 }

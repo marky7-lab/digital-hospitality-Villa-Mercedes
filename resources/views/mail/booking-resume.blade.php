@@ -3,7 +3,7 @@
 
 Hello {{ $guestName }},
 
-You had a booking ready to confirm and left before it was submitted. Nothing is held, so here is the way back — the dates, the party size and any companion names you filled in are still there.
+You can pick up where you left off. We saved the dates, guest count, and any names you entered. Your dates are still open for others to book.
 
 <x-mail::panel>
 **{{ $facility }}**
@@ -17,12 +17,11 @@ Guests: {{ $guestCount }}
 Finish my booking
 </x-mail::button>
 
-The link works for {{ $expireHours }} hours. It is not a hold: if someone else has taken those dates, the page will say so and show you what is free instead. The total is calculated again when you open it, so you always confirm the current price.
+This link works for {{ $expireHours }} hours. When you open it, you’ll see the latest price and availability. If your dates are taken, we’ll show you other dates you can book.
 
 @if($resortPhone)
 Questions? Call us at [{{ $resortPhone }}]({{ $resortPhoneHref }}).
 @endif
 
-Thanks,<br>
-{{ config('resort.short_name') }}
+The {{ config('resort.short_name') }} team
 </x-mail::message>

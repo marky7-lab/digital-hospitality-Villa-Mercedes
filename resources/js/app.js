@@ -22,6 +22,12 @@ import {
 
 enableReservationAuth();
 
+document.addEventListener('input', ({ target }) => {
+    if (target instanceof HTMLInputElement && target.hasAttribute('data-ph-mobile')) {
+        target.value = target.value.replace(/[^0-9]/g, '').slice(0, 11);
+    }
+}, true);
+
 // The money format is needed from inline Alpine expressions (x-text), which
 // cannot import a module, so it is exposed on the window next to Alpine itself.
 // The definition lives in one file; this is only how the templates reach it.

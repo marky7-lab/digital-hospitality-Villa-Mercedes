@@ -240,7 +240,7 @@ img {
     line-height: 1.5;
     min-width: 44px;
     overflow-wrap: break-word;
-    padding: 2px 0;
+    padding: 10px 18px;
     text-align: center;
     text-decoration: none;
 }
@@ -248,24 +248,16 @@ img {
 .button-blue,
 .button-primary {
     background-color: #623F1F;
-    border-bottom: 8px solid #623F1F;
-    border-left: 18px solid #623F1F;
-    border-right: 18px solid #623F1F;
-    border-top: 8px solid #623F1F;
 }
 
 .button-green,
 .button-success {
     background-color: #166534;
-    border: solid #166534;
-    border-width: 8px 18px;
 }
 
 .button-red,
 .button-error {
     background-color: #991b1b;
-    border: solid #991b1b;
-    border-width: 8px 18px;
 }
 
 /* Panels */

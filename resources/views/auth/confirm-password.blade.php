@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-8">
-        <h2 class="font-display text-3xl font-bold text-text">Confirm your password</h2>
+        <h2 class="font-display text-2xl font-bold sm:text-3xl text-text">Confirm your password</h2>
         <p class="mt-2 text-text-muted">This is a secure area. Please confirm your password before continuing.</p>
     </div>
 

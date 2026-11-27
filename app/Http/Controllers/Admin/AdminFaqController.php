@@ -28,7 +28,7 @@ class AdminFaqController extends Controller
     {
         $this->service->createFaq($request->user(), $request->validated());
 
-        return redirect()->back()->with('success', 'FAQ created successfully.');
+        return redirect()->back()->with('success', 'FAQ added.');
     }
 
     public function update(Request $request, Faq $faq): RedirectResponse
@@ -42,13 +42,13 @@ class AdminFaqController extends Controller
 
         $this->service->updateFaq($request->user(), $faq, $validated);
 
-        return redirect()->back()->with('success', 'FAQ updated successfully.');
+        return redirect()->back()->with('success', 'FAQ updated.');
     }
 
     public function toggleStatus(Request $request, Faq $faq): RedirectResponse
     {
         $this->service->toggleFaqStatus($request->user(), $faq, !$faq->is_active);
 
-        return redirect()->back()->with('success', 'FAQ status toggled successfully.');
+        return redirect()->back()->with('success', 'FAQ visibility updated.');
     }
 }

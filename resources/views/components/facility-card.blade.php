@@ -33,7 +33,7 @@
 @endphp
 
 <x-card class="group relative flex h-full flex-col overflow-hidden transition-colors duration-200 hover:border-primary/50 focus-within:border-primary">
-    <div class="relative w-full aspect-[16/10] bg-muted flex items-center justify-center text-text-muted overflow-hidden">
+    <div class="relative w-full aspect-video sm:aspect-[16/10] bg-muted flex items-center justify-center text-text-muted overflow-hidden">
         @if($showImage && $coverUrl)
             <img src="{{ $coverUrl }}" alt="{{ $facility->name }}" loading="lazy" decoding="async" class="h-full w-full object-cover transition duration-500 ease-out group-hover:scale-[1.03]" />
         @else
@@ -53,11 +53,11 @@
         @endif
     </div>
 
-    <div class="flex flex-col flex-grow p-5">
-        <h3 class="font-heading text-2xl font-semibold text-text leading-snug">
-            {{-- Stretched link: the whole card is clickable, but only one link is announced. --}}
+    <div class="flex flex-col flex-grow p-3.5 sm:p-5">
+        <h3 class="font-heading text-xl font-semibold sm:text-2xl text-text leading-snug">
             <a href="{{ route($detailRoute, ['facility' => $facility, ...$stayQuery]) }}" class="focus:outline-none before:absolute before:inset-0 group-hover:text-primary transition-colors">
                 <span class="relative">{{ $cardTitle }}</span>
+                @if($roomUnit)<span class="sr-only"> {{ $roomUnit }}</span>@endif
             </a>
         </h3>
         @if($facility->isFlyerPackage() && $facility->stayScheduleLabel())
@@ -72,7 +72,7 @@
             </p>
         @endif
 
-        <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-text-muted">
+        <div class="mt-3 flex flex-wrap gap-x-3 sm:mt-4 sm:gap-x-4 gap-y-2 text-sm text-text-muted">
             @if($facility->bedSetupSummary())
                 <span class="flex items-center gap-1.5">
                     <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8h18M5 8v11m14-11v11M4 19h16M8 8V6a2 2 0 012-2h4a2 2 0 012 2v2" /></svg>
@@ -115,12 +115,12 @@
             </p>
         @endif
 
-        <div class="mt-auto pt-4 border-t border-border flex items-end justify-between gap-3">
+        <div class="mt-auto pt-3 sm:pt-4 border-t border-border flex items-end justify-between gap-3">
             <div>
                 @if($baseRate)
                     <p class="text-xs font-semibold uppercase tracking-wide text-text-muted">From</p>
                     <p class="flex items-baseline gap-1">
-                        <x-amount :value="$baseRate->amount" class="font-heading text-3xl font-semibold text-primary" />
+                        <x-amount :value="$baseRate->amount" class="font-heading text-2xl font-semibold sm:text-3xl text-primary" />
                         <span class="text-sm text-text-muted">{{ $rateUnit }}</span>
                     </p>
                 @else
@@ -130,8 +130,8 @@
 
             @if($facility->isOnlineBookable())
                 <a href="{{ route($detailRoute, ['facility' => $facility, ...$stayQuery]) }}"
-                   class="relative z-10 inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition">
-                    View details
+                   class="relative z-10 inline-flex min-h-11 items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition">
+                    View details<span class="sr-only"> for {{ $roomUnit ? $cardTitle.' '.$roomUnit : $facility->name }}</span>
                 </a>
             @else
                 <span class="relative inline-flex items-center text-xs font-semibold uppercase tracking-[0.1em] text-primary group-hover:underline">

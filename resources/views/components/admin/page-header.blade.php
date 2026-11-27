@@ -14,7 +14,7 @@
         ->values();
 @endphp
 
-<div {{ $attributes->class(['mb-7']) }}>
+<div {{ $attributes->class(['mb-4 sm:mb-7']) }}>
     @if ($crumbs->isNotEmpty())
         <nav aria-label="Breadcrumb" class="mb-3">
             <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
@@ -41,7 +41,7 @@
     @endif
 
     @if ($title || isset($actions) || $description)
-        <div class="flex flex-col gap-4 border-l-4 border-primary pl-4 xl:flex-row xl:items-start xl:justify-between">
+        <div class="flex flex-col gap-3 border-l-4 border-primary pl-3 sm:gap-4 sm:pl-4 xl:flex-row xl:items-start xl:justify-between">
             <div class="min-w-0">
                 @if ($title)
                     <h1 class="text-2xl font-bold tracking-tight text-text sm:text-3xl">{{ $title }}</h1>

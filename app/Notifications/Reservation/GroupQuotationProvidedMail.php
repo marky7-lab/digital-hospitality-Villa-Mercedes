@@ -43,11 +43,10 @@ class GroupQuotationProvidedMail extends Notification implements ShouldQueue
         })->all();
 
         return (new MailMessage)
-            ->subject('Quotation provided for your ' . config('resort.short_name') . ' booking ' . $this->group->group_code)
+            ->subject('Your quote from ' . config('resort.short_name') . ' for booking ' . $this->group->group_code)
             ->markdown('mail.group-quotation-provided', [
                 'guestName' => $this->group->guest_name,
                 'groupCode' => $this->group->group_code,
-                'policyVersion' => $this->group->policy_version,
                 'confirmedPolicy' => $this->group->policy_version === config('resort.policy.confirmed_version'),
                 'quotedTotal' => Money::of($this->group->total_amount),
                 'depositRequired' => Money::of($this->group->deposit_required),

@@ -34,7 +34,7 @@
     <div class="mb-8">
         <p class="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Welcome back</p>
         <span class="mt-2 block h-px w-10 bg-accent/70" aria-hidden="true"></span>
-        <h2 class="mt-4 font-heading text-3xl sm:text-4xl font-semibold text-text">Sign in to your account</h2>
+        <h2 class="mt-3 font-heading text-2xl sm:mt-4 sm:text-4xl font-semibold text-text">Sign in to your account</h2>
         <p class="mt-3 text-sm text-text-muted">
             No account yet?
             <a href="{{ route('register') }}" class="font-semibold text-primary hover:underline underline-offset-2">Create one in a minute</a>.

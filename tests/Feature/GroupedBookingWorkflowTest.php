@@ -194,8 +194,8 @@ class GroupedBookingWorkflowTest extends TestCase
                 'guests' => 2,
             ]));
 
+        $this->assertMatchesRegularExpression('/<h1\b[^>]*>New reservation<\/h1>/', $response->getContent());
         $response->assertOk()
-            ->assertSee('Reserve your stay &amp; services', false)
             ->assertDontSee('Unified Booking Workspace')
             ->assertSee('id="account-navigation"', false)
             ->assertSee('aria-controls="account-navigation"', false)
@@ -235,6 +235,7 @@ class GroupedBookingWorkflowTest extends TestCase
             ->assertJsonPath('name', $this->room->name);
 
         $this->assertSame($this->room->id, session('grouped_booking.intent.lines.0.facility_id'));
+        $this->assertSame(0, session('grouped_booking.intent.lines.0.guest_count'));
         $this->assertNull(session('grouped_booking.intent.lines.0.check_in'));
         $this->assertNull(session('grouped_booking.intent.lines.0.check_out'));
     }

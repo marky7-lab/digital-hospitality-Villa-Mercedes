@@ -12,8 +12,8 @@
 
             <x-customer.page-header
                 :breadcrumbs="[
-                    ['label' => 'My reservations', 'href' => route('customer.reservations.index')],
-                    ['label' => $reservation->reservation_code, 'href' => route('customer.reservations.show', $reservation)],
+                    ['label' => 'My reservations', 'href' => route('customer.reservations.index', request()->only('tab', 'page'))],
+                    ['label' => $reservation->reservation_code, 'href' => route('customer.reservations.show', [$reservation, ...request()->only('tab', 'page')])],
                     ['label' => 'Payments'],
                 ]"
                 eyebrow="Secure payment"

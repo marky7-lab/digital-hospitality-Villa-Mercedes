@@ -27,7 +27,7 @@ use Throwable;
 
 class BookingMagicLinkService
 {
-    public const SENT_STATUS = 'If that email can receive mail, we sent a confirmation link. Check your inbox and spam folder.';
+    public const SENT_STATUS = 'Check your inbox for a link to confirm your booking. If you don’t see it, check your spam folder.';
 
     public function __construct(
         private readonly CustomerReservationService $reservationService,

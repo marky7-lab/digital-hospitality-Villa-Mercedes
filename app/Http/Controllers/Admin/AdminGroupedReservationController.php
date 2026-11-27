@@ -94,12 +94,12 @@ class AdminGroupedReservationController extends Controller
                     'success' => true,
                     'group_code' => $group->group_code,
                     'redirect_url' => route('admin.reservation-groups.show', $group),
-                    'message' => 'Walk-in group booking created successfully.',
+                    'message' => 'Walk-in group booking saved.',
                 ]);
             }
 
             return redirect()->route('admin.reservation-groups.show', $group)
-                ->with('success', 'Walk-in group booking created successfully.');
+                ->with('success', 'Walk-in group booking saved.');
         } catch (\Throwable $e) {
             if ($request->wantsJson()) {
                 return response()->json([
@@ -177,7 +177,7 @@ class AdminGroupedReservationController extends Controller
     {
         try {
             $this->bookingService->approveGroup($group, $request->user());
-            return redirect()->back()->with('success', 'Group reservation request approved successfully.');
+            return redirect()->back()->with('success', 'Group booking approved.');
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -201,7 +201,7 @@ class AdminGroupedReservationController extends Controller
                 $validated['notes'] ?? null
             );
 
-            return redirect()->back()->with('success', 'Quotation submitted successfully.');
+            return redirect()->back()->with('success', 'Group quote saved.');
         } catch (\Throwable $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

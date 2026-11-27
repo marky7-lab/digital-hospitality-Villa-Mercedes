@@ -25,7 +25,7 @@
 
         <div>
             <x-input-label for="phone" :value="__('Mobile number')" />
-            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" autocomplete="tel" inputmode="numeric" pattern="09[0-9]{9}" minlength="11" maxlength="11" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." oninput="this.value = this.value.replace(/\D/g, '').slice(0, 11)" />
+            <x-text-input id="phone" name="phone" type="tel" class="mt-1 block w-full" :value="old('phone', $user->phone)" autocomplete="tel" inputmode="numeric" pattern="09[0-9]{9}" minlength="11" maxlength="11" placeholder="09171234567" title="Enter exactly 11 digits beginning with 09." data-ph-mobile />
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
         </div>
 

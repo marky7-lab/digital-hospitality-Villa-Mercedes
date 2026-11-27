@@ -105,7 +105,7 @@ class PaymentService
                 ->log("Payment submitted for reservation {$reservation->reservation_code}");
 
             if ($deposit) {
-                DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'Deposit proof received. Staff will verify the incoming transfer.')));
+                DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'We received your deposit receipt. Our team will check the payment.')));
             }
 
             return $payment;
@@ -155,7 +155,7 @@ class PaymentService
                     if ($reservation->status === ReservationStatus::Approved && $reservation->getDepositAvailableAmount() > 0) {
                         $reservation->update(['deposit_due_at' => DepositDeadline::forReservation($reservation)]);
                     }
-                    DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'Your deposit payment was verified. View the reservation for its current status and any deposit shortfall.')));
+                    DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'We checked your deposit. Open your booking to see its status and whether you still owe part of the deposit.')));
                 }
             }
 
@@ -255,7 +255,7 @@ class PaymentService
 
             if ($reservation && $lockedPayment->source === 'customer_deposit') {
                 $reservation->update(['deposit_due_at' => DepositDeadline::forReservation($reservation)]);
-                DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'Deposit proof needs correction: '.$reason)));
+                DB::afterCommit(fn () => $reservation->user?->notify(new DepositUpdateNotification($reservation->id, 'We couldn’t verify your deposit receipt. Here’s what needs attention: '.$reason)));
             }
 
             activity()
@@ -295,10 +295,10 @@ class PaymentService
             $locked = $this->lockReservationLedger($reservation->id);
             if ($locked->deposit_required === null || ! in_array($locked->status, [ReservationStatus::Pending, ReservationStatus::Approved], true)
                 || $locked->getPendingVerificationTotal() > 0 || $locked->getDepositAvailableAmount() <= 0 || DepositDeadline::forReservation($locked)->lte(now())) {
-                throw new InvalidPaymentAmountException('Resolve pending proofs first. Top-ups require a confirmed booking with a deposit shortfall before its deadline.');
+                throw new InvalidPaymentAmountException('Check any receipts that are still under review first. You can ask for an additional deposit only if money is still due and the deadline has not passed.');
             }
             $locked->update(['deposit_due_at' => DepositDeadline::forReservation($locked)]);
-            $message = 'Please submit a deposit top-up of '.Money::of($locked->getDepositAvailableAmount()).' by '.$locked->deposit_due_at->copy()->timezone(ResortTime::timezone())->format('M d, Y g:i A').' Philippine time. '.$reason;
+            $message = 'Please pay the remaining deposit of '.Money::of($locked->getDepositAvailableAmount()).' by '.$locked->deposit_due_at->copy()->timezone(ResortTime::timezone())->format('M d, Y g:i A').' Philippine time. '.$reason;
             activity()->performedOn($locked)->causedBy($actor)->event('deposit_top_up_requested')->withProperties(['reason' => $reason])->log($message);
             DB::afterCommit(fn () => $locked->user?->notify(new DepositUpdateNotification($locked->id, $message)));
         }, 5);
@@ -367,7 +367,7 @@ class PaymentService
             // Recording money no longer confirms a booking either: approval is a
             // decision staff make on the reservation, and it is what tells the
             // guest the 50% QR step is open. A cash entry is not that decision.
-            DB::afterCommit(fn () => $locked->user?->notify(new DepositUpdateNotification($locked->id, 'Staff recorded an on-site payment. Your payment history has been updated.')));
+            DB::afterCommit(fn () => $locked->user?->notify(new DepositUpdateNotification($locked->id, 'The resort recorded a payment you made on site. You can see it in your payment history.')));
 
             return $payment;
         }, 5);

@@ -49,8 +49,8 @@
         @else
             {{-- Marketing shell: its neighbours are the public listings, so it keeps
                  the public way back. --}}
-            <nav class="flex mb-6 text-sm text-muted-foreground" aria-label="Breadcrumb">
-                <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <nav class="mb-6 text-sm text-muted-foreground" aria-label="Breadcrumb">
+                <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 break-words">
                     <li class="inline-flex items-center">
                         <a href="{{ $homeUrl }}" class="inline-flex items-center hover:text-text transition-colors">
                             Home
@@ -89,42 +89,43 @@
                             <h1 class="font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-text tracking-tight">
                                 {{ $facility->name }}
                             </h1>
-                            @if($facility->isRoom())
-                                <a href="#reservation-details" class="mt-2 inline-flex min-h-[44px] items-center font-semibold text-primary underline lg:hidden">View rate and booking options</a>
-                            @endif
                         </div>
                     @endunless
+                    <a href="#reservation-details" class="inline-flex min-h-11 items-center font-semibold text-primary underline underline-offset-4 lg:hidden">View rate and booking options</a>
 
                     <div
                         class="space-y-3"
                         @if($facility->galleryImages->count() > 0)
                             x-data="{
                                 active: 0,
-                                lightbox: false,
                                 photos: {{ \Illuminate\Support\Js::from($facility->galleryImages->map(fn ($image) => [
                                     'url' => $image->url(),
                                     'caption' => $image->caption,
                                     'alt' => $image->caption ?: $facility->name,
-                                ])->values()) }}
+                                ])->values()) }},
+                                stepPhoto(direction) {
+                                    this.active = (this.active + direction + this.photos.length) % this.photos.length;
+                                }
                             }"
                         @endif
                     >
                         <div class="relative w-full h-[300px] md:h-[440px] rounded-2xl overflow-hidden bg-muted flex items-center justify-center text-muted-foreground border border-border shadow-sm">
                             @if($facility->galleryImages->count() > 0)
-                                <button type="button" class="absolute inset-0" @click="lightbox = true">
-                                    <img :src="photos[active].url" :alt="photos[active].alt" class="w-full h-full object-cover">
+                                <button type="button" class="group absolute inset-0 focus-visible:outline focus-visible:outline-4 focus-visible:-outline-offset-4 focus-visible:outline-white" aria-label="Open full-size photo" aria-haspopup="dialog" @click="$refs.photoDialog.showModal()">
+                                    <img src="{{ $facility->galleryImages->first()->url() }}" alt="{{ $facility->galleryImages->first()->caption ?: $facility->name }}" :src="photos[active].url" :alt="photos[active].alt" fetchpriority="high" class="w-full h-full object-cover">
+                                    <span aria-hidden="true" class="absolute bottom-3 left-3 rounded-full bg-black/75 px-3 py-1.5 text-xs font-semibold text-white group-hover:bg-black">Enlarge photo</span>
                                 </button>
                                 @if($facility->galleryImages->count() > 1)
-                                    <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 flex items-center justify-center"
-                                            @click.stop="active = (active - 1 + photos.length) % photos.length" aria-label="Previous photo">
+                                    <button type="button" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/75 hover:bg-black text-white rounded-full size-11 flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                                            @click="stepPhoto(-1)" aria-label="Previous photo">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                                     </button>
-                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full w-10 h-10 flex items-center justify-center"
-                                            @click.stop="active = (active + 1) % photos.length" aria-label="Next photo">
+                                    <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/75 hover:bg-black text-white rounded-full size-11 flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                                            @click="stepPhoto(1)" aria-label="Next photo">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                     </button>
                                 @endif
-                                <span class="absolute bottom-3 right-3 text-xs font-medium text-white bg-black/60 rounded-full px-2.5 py-1" x-text="(active + 1) + ' / ' + photos.length">1 / {{ $facility->galleryImages->count() }}</span>
+                                <span aria-hidden="true" class="pointer-events-none absolute bottom-3 right-3 text-xs font-medium text-white bg-black/75 rounded-full px-2.5 py-1" x-text="(active + 1) + ' / ' + photos.length">1 / {{ $facility->galleryImages->count() }}</span>
                             @else
                                 <svg class="w-16 h-16 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 <span class="absolute text-sm font-medium opacity-50 uppercase tracking-widest mt-24">No Image Available</span>
@@ -132,7 +133,8 @@
                         </div>
 
                         @if($facility->galleryImages->count() > 0)
-                            <p class="text-sm text-muted-foreground min-h-[1.25rem]" x-text="photos[active].caption || ''"></p>
+                            <p role="status" class="sr-only" x-text="'Photo ' + (active + 1) + ' of ' + photos.length + '. ' + photos[active].alt"></p>
+                            <p class="text-sm text-muted-foreground" x-show="photos[active].caption" x-text="photos[active].caption">{{ $facility->galleryImages->first()->caption }}</p>
                         @endif
 
                         @if($facility->galleryImages->count() > 1)
@@ -140,39 +142,51 @@
                                 @foreach($facility->galleryImages as $index => $image)
                                     <button type="button"
                                             @click="active = {{ $index }}"
-                                            class="aspect-square rounded-lg overflow-hidden border-2 transition"
+                                            aria-label="Show photo {{ $loop->iteration }}{{ $image->caption ? ': '.$image->caption : '' }}"
+                                            :aria-current="active === {{ $index }} ? 'true' : null"
+                                            class="aspect-square min-h-11 rounded-lg overflow-hidden border-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                                             :class="active === {{ $index }} ? 'border-primary' : 'border-transparent hover:border-border'">
-                                        <img src="{{ $image->url() }}" alt="{{ $image->caption ?: $facility->name }}" class="w-full h-full object-cover">
+                                        <img src="{{ $image->url() }}" alt="" loading="lazy" class="w-full h-full object-cover">
                                     </button>
                                 @endforeach
                             </div>
                         @endif
 
                         @if($facility->galleryImages->count() > 0)
-                            <div
-                                x-show="lightbox"
-                                x-cloak
-                                class="fixed inset-0 z-[60] bg-black/85 flex items-center justify-center p-6"
-                                @keydown.escape.window="lightbox = false"
-                                @click.self="lightbox = false"
+                            <dialog
+                                x-ref="photoDialog"
+                                aria-labelledby="facility-photo-title"
+                                closedby="any"
+                                class="m-auto max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-5xl overflow-auto overscroll-contain rounded-xl bg-neutral-950 p-3 text-white backdrop:overflow-hidden backdrop:overscroll-contain backdrop:bg-black/85 sm:p-5"
+                                @keydown.left.prevent="stepPhoto(-1)"
+                                @keydown.right.prevent="stepPhoto(1)"
                             >
-                                <div class="max-w-5xl w-full">
-                                    <img :src="photos[active].url" :alt="photos[active].alt" class="w-full max-h-[80vh] object-contain">
-                                    <p class="mt-4 text-center text-white" x-text="photos[active].caption || ''"></p>
-                                    <button type="button" class="mt-4 mx-auto block text-sm font-medium text-white/80 hover:text-white" @click="lightbox = false">Close</button>
+                                <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
+                                    <h1 id="facility-photo-title" class="font-semibold">{{ $facility->name }} photos</h1>
+                                    <form method="dialog">
+                                        <button autofocus type="submit" class="min-h-11 rounded-lg border border-white/40 px-4 text-sm font-semibold hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Close</button>
+                                    </form>
                                 </div>
-                            </div>
+                                <img :src="photos[active].url" :alt="photos[active].alt" class="w-full max-h-[68dvh] object-contain">
+                                <p role="status" class="mt-3 text-center text-sm" x-text="'Photo ' + (active + 1) + ' of ' + photos.length + (photos[active].caption ? ' · ' + photos[active].caption : '')"></p>
+                                @if($facility->galleryImages->count() > 1)
+                                    <div class="mt-3 flex flex-wrap justify-center gap-2">
+                                        <button type="button" @click="stepPhoto(-1)" class="min-h-11 rounded-lg border border-white/40 px-4 text-sm hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Previous photo</button>
+                                        <button type="button" @click="stepPhoto(1)" class="min-h-11 rounded-lg border border-white/40 px-4 text-sm hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">Next photo</button>
+                                    </div>
+                                @endif
+                            </dialog>
                         @endif
                     </div>
                 </div>
 
                 {{-- Overview --}}
+                @if(filled($facility->description))
                 <section>
                     <h2 class="font-heading text-3xl md:text-4xl font-semibold text-text mb-4">Overview</h2>
-                    <p class="text-lg text-muted-foreground leading-relaxed whitespace-pre-wrap">{{ $facility->description }}</p>
+                    <p class="max-w-prose break-words text-base text-muted-foreground leading-relaxed whitespace-pre-wrap">{{ $facility->description }}</p>
                 </section>
-
-                <hr class="border-border">
+                @endif
 
                 {{-- Amenities / Inclusions --}}
                 @if($facility->amenities->count() > 0)
@@ -269,12 +283,9 @@
                                     @php
                                         // Carry dates from discovery into the next step without
                                         // treating the published starting rate as a final quote.
-                                        $stayQuery = array_filter(request()->only([
-                                            'check_in', 'check_out', 'arrival', 'departure', 'guests', 'date', 'session',
-                                        ]), fn ($value) => $value !== null && $value !== '');
                                         $nextUrl = auth()->check()
-                                            ? route('customer.grouped-booking.workspace', ['facility_id' => $facility->id, ...$stayQuery])
-                                            : route('customer.booking.legacy', ['facility' => $facility->id, ...$stayQuery]);
+                                            ? route('customer.grouped-booking.workspace', ['facility_id' => $facility->id, ...$selectionQuery])
+                                            : route('customer.booking.legacy', ['facility' => $facility->id, ...$selectionQuery]);
                                         $buttonLabel = 'Add to booking';
                                         $nextHint = 'Set this service schedule in your booking, then check live availability and the exact estimate.';
                                     @endphp

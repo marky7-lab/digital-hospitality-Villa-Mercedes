@@ -15,7 +15,7 @@
         <div>
             <x-input-label for="reservation-login-password" value="Password" />
             <div class="relative mt-1">
-                <x-text-input id="reservation-login-password" name="password" type="password" required autocomplete="current-password" class="w-full !pr-14" />
+                <x-text-input id="reservation-login-password" name="password" type="password" data-custom-password-reveal required autocomplete="current-password" class="w-full !pr-14" />
                 <button type="button" data-auth-password-toggle aria-label="Show password" aria-pressed="false" aria-controls="reservation-login-password" class="absolute inset-y-0 right-1 flex min-h-11 min-w-11 items-center justify-center bg-transparent text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
                     <svg data-eye-open xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
                     <svg data-eye-closed xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden h-5 w-5" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a14 14 0 0 1-3.1 3.8M6.2 6.2C3.5 8.3 2 12 2 12s3.5 7 10 7a10.2 10.2 0 0 0 4.1-.9"/><path d="M10 10a3 3 0 0 0 4 4"/></svg>

@@ -56,12 +56,15 @@ class BookingDiscussionController extends Controller
         }
 
         return back()->with('success', match ($data['action']) {
-            'propose_change' => 'Revised quote ready for guest review. Your current stay is still booked.',
+            'propose_change' => 'The proposed dates and price are ready to review. The current dates stay booked while the change is being reviewed.',
             'accept_change' => 'Quote accepted. Staff will check availability before confirming the new dates.',
-            'confirm_change' => 'Reschedule confirmed. The reservation now uses the new dates.',
+            'confirm_change' => 'The new booking dates are confirmed.',
             'arrival_discount' => 'Check-in discount recorded.',
             'review_arrival' => 'Early check-in charge reviewed.',
-            default => 'Booking discussion recorded. A request, owner approval, and money returned are separate stages.',
+            'request_refund' => $staff ? 'The cancellation and refund request was saved.' : 'The resort received your cancellation and refund request.',
+            'approve_refund' => 'The owner’s refund approval was recorded. Record the refund once the money is sent.',
+            'return_funds' => 'The refund was recorded as sent.',
+            default => 'Your booking update was saved.',
         });
     }
 
@@ -73,6 +76,6 @@ class BookingDiscussionController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        return back()->with('success', 'Cleaning complete. Availability still checks reservations and operational closures.');
+        return back()->with('success', 'Cleaning marked complete. Upcoming bookings and closures still determine when guests can book this space.');
     }
 }
